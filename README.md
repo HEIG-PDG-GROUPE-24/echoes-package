@@ -74,7 +74,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-For a more specific example, you can refer to the video demo available on the [landing page](https://github.com/HEIG-PDG-GROUPE-24/landing-page).
+For a more specific example, you can refer to the video demo available on the [landing page](https://heig-pdg-groupe-24.github.io/landing-page/).
 
 <!-- CONTACT -->
 ## Contact
