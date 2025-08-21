@@ -37,7 +37,11 @@ jobs:
     needs: test   # <- ensures build only runs after tests pass
     strategy:
       matrix:
-        targetPlatform: [ StandaloneWindows64, StandaloneLinux64, StandaloneOSX, WebGL ]
+        targetPlatform: 
+          - StandaloneWindows64
+          - StandaloneLinux64
+          - StandaloneOSX
+          - WebGL 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
