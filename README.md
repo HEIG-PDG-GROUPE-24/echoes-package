@@ -8,7 +8,7 @@
     <br />
     <a href="">View Demo</a>
     &middot;
-    <a href="https://github.com/HEIG-PDG-GROUPE-24/landing-page">Landing page</a>
+    <a href="https://heig-pdg-groupe-24.github.io/landing-page/">Landing page</a>
 </div>
 
 
