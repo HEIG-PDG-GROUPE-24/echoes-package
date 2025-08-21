@@ -36,11 +36,11 @@ The goal is to provide developers with a reusable, modular, and easy-to-integrat
 
 ### Non-Functional Requirements
 
-*Performance*: The plugin should support hundreds of NPCs without significantly impacting the framerate.
-*Extensibility*: It should be easy to extend (e.g., adding a new type of emotion/opinion).
-*Compatibility*: Compatible with Unity 6.2 and later.
-*Documentation*: Clear documentation with usage examples.
-*Testability*: The architecture should be decoupled (using patterns like Observer, Strategy, ScriptableObjects).
+* *Performance*: The plugin should support hundreds of NPCs without significantly impacting the framerate.
+* *Extensibility*: It should be easy to extend (e.g., adding a new type of emotion/opinion).
+* *Compatibility*: Compatible with Unity 6.2 and later.
+* *Documentation*: Clear documentation with usage examples.
+* *Testability*: The architecture should be decoupled (using patterns like Observer, Strategy, ScriptableObjects).
 
 ### Technical choices
 
