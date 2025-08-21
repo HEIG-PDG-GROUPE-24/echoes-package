@@ -15,11 +15,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Develop a Unity plugin to manage a dynamic NPC social network, including:
+### Problem Statement
 
-* Relationships between NPCs (contacts, trust, factions).
-* Dynamic opinions (friendship, distrust, hostility, admiration, etc.).
-* Rumor system allowing NPCs to propagate information to contacts.
+In most games, NPCs feel flat. They don’t really talk about you, don’t share what they know, and only react in scripted ways. If you want NPCs that act like a small society with trust, rumors, opinions, and factions you usually have to build the whole system from scratch. That takes a lot of time for something many devs would like “out of the box.”
+
+Our library solves this by giving you a ready system where NPCs can:
+
+* Have a relationship between NPCs (contacts, trust, factions).
+* Have dynamic opinions (friendship, distrust, hostility, admiration, etc.).
+* Have a rumor system allowing NPCs to propagate information to contacts.
 * Dialogue or behavior conditions based on these opinions.
 
 The goal is to provide developers with a reusable, modular, and easy-to-integrate tool to enrich their narrative games, RPGs, or social simulations.
