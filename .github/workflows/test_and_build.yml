@@ -1,14 +1,14 @@
-name: Test And Build
+name: Test-And-Build
 
 on: [push, pull_request]
 
 jobs:
   test:
-    name: run unit tests
+    name: run-unit-tests
     runs-on: ubuntu-latest
     steps:
       # Checkout
-      - name: Checkout repository
+      - name: Checkout-repository
         uses: actions/checkout@v4
         with:
           lfs: true
@@ -22,7 +22,7 @@ jobs:
             Library-
 
       # Test
-      - name: Run tests
+      - name: Run-tests
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -32,7 +32,7 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
   build:
-    name: build unity project
+    name: build-unity-project
     runs-on: ubuntu-latest
     needs: test   # <- ensures build only runs after tests pass
     strategy:
@@ -43,7 +43,7 @@ jobs:
           - StandaloneOSX
           - WebGL 
     steps:
-      - name: Checkout repository
+      - name: Checkout-repository
         uses: actions/checkout@v4
         with:
           lfs: true
@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             Library-
 
-      - name: Build project
+      - name: Build-project
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
