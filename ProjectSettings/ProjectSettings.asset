@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 02c32c0fa49266fcb959e3092389406c
+  productGUID: 3c3010c3e66d31e17b8730506258800e
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: pipeline_demo
+  productName: Echoes
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -511,7 +511,7 @@ PlayerSettings:
   ps4GarlicHeapSize: 2048
   ps4ProGarlicHeapSize: 2560
   playerPrefsMaxSize: 32768
-  ps4Passcode: SxkWAegexx5VCllwa7yDXOwLTx4bJnll
+  ps4Passcode: 6gMWTCBvx15UYziCXQZoOIP9SAdu7u9D
   ps4pnSessions: 1
   ps4pnPresence: 1
   ps4pnFriends: 1
@@ -600,14 +600,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: pipeline_demo
+  metroPackageName: Echoes
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: pipeline_demo
+  metroApplicationDescription: Echoes
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -678,11 +678,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: eb1fe54a-84e9-4eec-862a-82aeeef7d562
+  cloudProjectId: b09b81cd-f065-4670-a03c-f88dbc069424
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: pipeline_demo
-  organizationId: raphael_perret_heig
+  projectName: Echoes
+  organizationId: mathieu2000
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
