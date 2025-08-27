@@ -6,10 +6,10 @@ public record EchoesNpcData
 {
     public string name;
     
-    public PersonalityData opinionOfPlayer;
-    public PersonalityData npcPersonality;
+    public TraitValue[] opinionOfPlayer;
+    public TraitValue[] npcPersonality;
     
-    public InformantsTrustLevels trustLevels;
+    public TrustLevel[] trustLevels;
 
     public EchoesNpcData(EchoesNpc npc)
     {

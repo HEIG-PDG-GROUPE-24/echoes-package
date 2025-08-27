@@ -7,29 +7,27 @@ namespace Tests.Play
 {
     public class SaveSystemTests
     {
-        private PersonalityData RandomPersonalityData(int size = 5)
+        private TraitValue[] RandomPersonalityData(int size = 5)
         {
-            PersonalityData personalityData = new PersonalityData();
-            personalityData.traitValues = new TraitValue[size];
+            TraitValue[] personalityData = new TraitValue[size];
             for (int i = 0; i < size; i++)
             {
-                personalityData.traitValues[i] = new TraitValue();
-                personalityData.traitValues[i].traitName = "trait name " + i;
-                personalityData.traitValues[i].value = Random.Range(-1.0f, 1.0f);
+                personalityData[i] = new TraitValue();
+                personalityData[i].traitName = "trait name " + i;
+                personalityData[i].value = Random.Range(-1.0f, 1.0f);
             }
             
             return personalityData;
         }
 
-        private InformantsTrustLevels RandomInformantsTrustLevels(int size = 5)
+        private TrustLevel[] RandomInformantsTrustLevels(int size = 5)
         {
-            InformantsTrustLevels trustLevels = new InformantsTrustLevels();
-            trustLevels.trustLevels =  new TrustLevel[size];
+            TrustLevel[] trustLevels = new TrustLevel[size];
             for (int i = 0; i < size; i++)
             {
-                trustLevels.trustLevels[i] = new TrustLevel();
-                trustLevels.trustLevels[i].informantName = "Name " + i;
-                trustLevels.trustLevels[i].level = Random.Range(-1.0f, 1.0f);
+                trustLevels[i] = new TrustLevel();
+                trustLevels[i].informantName = "Name " + i;
+                trustLevels[i].level = Random.Range(-1.0f, 1.0f);
             }
             
             return trustLevels;
@@ -37,21 +35,21 @@ namespace Tests.Play
         
         private SerializableNpcData GenerateComplexTestData(int size = 5)
         {
-            var data = new SerializableNpcData
+            var npcs = new SerializableNpcData
             {
                 data = new EchoesNpcData[size]
             };
             
             for (int i = 0; i < size; i++)
             {
-                data.data[i] = new EchoesNpcData(new EchoesNpc());
-                data.data[i].name = "Name " + i;
-                data.data[i].trustLevels = RandomInformantsTrustLevels();
-                data.data[i].npcPersonality = RandomPersonalityData();
-                data.data[i].opinionOfPlayer = RandomPersonalityData();
+                npcs.data[i] = new EchoesNpcData(new EchoesNpc());
+                npcs.data[i].name = "Name " + i;
+                npcs.data[i].trustLevels = RandomInformantsTrustLevels();
+                npcs.data[i].npcPersonality = RandomPersonalityData();
+                npcs.data[i].opinionOfPlayer = RandomPersonalityData();
             }
             
-            return data;
+            return npcs;
         }
 
         private SerializableNpcData GenerateSimpleTestData()
@@ -113,12 +111,12 @@ namespace Tests.Play
             }
         }
         
-        private void AssertPersonalityData(PersonalityData expectedPerso, PersonalityData actualPerso)
+        private void AssertPersonalityData(TraitValue[] expectedPerso, TraitValue[] actualPerso)
         {
-            for (int i = 0; i < expectedPerso.traitValues.Length; i++)
+            for (int i = 0; i < expectedPerso.Length; i++)
             {
-                var expected = expectedPerso.traitValues[i];
-                var actual = actualPerso.traitValues[i];
+                var expected = expectedPerso[i];
+                var actual = actualPerso[i];
                 
                 Assert.AreEqual(expected.traitName, actual.traitName);
                 Assert.AreEqual(expected.value, actual.value,0.01);
@@ -130,7 +128,7 @@ namespace Tests.Play
             for (int i = 0; i < expected.data.Length; i++)
             {
                 Assert.AreEqual(expected.data[i].name, actual.data[i].name);
-                AssertTrustLevels(expected.data[i].trustLevels.trustLevels, actual.data[i].trustLevels.trustLevels);
+                AssertTrustLevels(expected.data[i].trustLevels, actual.data[i].trustLevels);
                 AssertPersonalityData(expected.data[i].npcPersonality, actual.data[i].npcPersonality);
                 AssertPersonalityData(expected.data[i].opinionOfPlayer, actual.data[i].opinionOfPlayer);
             }

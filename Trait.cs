@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 [System.Serializable]
 public class Trait
 {
@@ -14,12 +11,4 @@ public class TraitValue
 {
     public string traitName;
     public double value;
-}
-
-public class Personality : List<TraitValue> {}
-
-[System.Serializable]
-public record PersonalityData // there is no way
-{
-    public TraitValue[] traitValues;
 }
