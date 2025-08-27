@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Echoes::Echoes.NPCSo
   name: 
   IntTreview: 010000000200000007000000
-  strength2: 0
-  dexterity2: 0
-  intelligence2: 0
-  hasMainQuest2: 0
-  questColor: {r: 1, g: 0.5, b: 0, a: 1}
+  Contacts:
+  - ContactName: Alice
+    TrustLevel: 2
+  - ContactName: Bob
+    TrustLevel: 8
+  Traits:
+  - TraitName: Brave
+    Intensity: 7
+  - TraitName: Cautious
+    Intensity: 4
   top: 0

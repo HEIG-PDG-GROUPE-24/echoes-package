@@ -10,9 +10,8 @@ namespace Echoes
     [CreateAssetMenu(fileName = "NPCSo", menuName = "Scriptable Objects/NPCSo")]
     public class NPCSo : ScriptableObject
     {
-        [SerializeField, ShowInInspector]
-        private string name;
-        
+        [SerializeField] private string name;
+
         [TabGroup("Infos", "Contacts", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
         [ValueDropdown("TreeViewOfInts", ExpandAllMenuItems = true)]
         public List<int> IntTreview = new List<int>() { 1, 2, 7 };
@@ -24,15 +23,13 @@ namespace Echoes
             new TrustRow("Alice", 5),
             new TrustRow("Bob", 3)
         };
-        
+
         [Serializable]
         public class TrustRow
         {
-            [ValueDropdown("GetNames")]
-            public string ContactName;
+            [ValueDropdown("GetNames")] public string ContactName;
 
-            [Range(0, 10)]
-            public int TrustLevel;
+            [Range(0, 10)] public int TrustLevel;
 
             [Button(ButtonSizes.Small)]
             public void ResetTrust()
@@ -52,15 +49,13 @@ namespace Echoes
                 return new List<string>() { "Alice", "Bob", "Charlie" };
             }
         }
-        
+
         [Serializable]
         public class TraitsRow
         {
-            [ReadOnly]
-            public string TraitName;
-            
-            [Range(0, 10)]
-            public int Intensity;
+            [ReadOnly] public string TraitName;
+
+            [Range(0, 10)] public int Intensity;
 
             [Button(ButtonSizes.Small)]
             public void ResetTrait()
@@ -76,6 +71,11 @@ namespace Echoes
         }
 
         [TabGroup("Infos", "Traits", SdfIconType.Stars, TextColor = "#F2B5D4")]
+        [ListDrawerSettings(
+            ShowItemCount = true,
+            DraggableItems = false,
+            HideAddButton = true,
+            HideRemoveButton = true)]
         public List<TraitsRow> Traits = new List<TraitsRow>()
         {
             new TraitsRow("Brave", 7),
@@ -83,8 +83,17 @@ namespace Echoes
         };
         
         [TabGroup("Infos", "Opinion", SdfIconType.Question, TextColor = "#FFE156")]
-        public bool top;
-        
+        [ListDrawerSettings(
+            ShowItemCount = true,
+            DraggableItems = false,
+            HideAddButton = true,
+            HideRemoveButton = true)]
+        public List<TraitsRow> Opinions = new List<TraitsRow>()
+        {
+            new TraitsRow("Brave", 8),
+            new TraitsRow("Cautious", 2)
+        };
+
         private IEnumerable TreeViewOfInts()
         {
             return new ValueDropdownList<int>()
