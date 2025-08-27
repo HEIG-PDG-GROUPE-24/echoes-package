@@ -16,13 +16,10 @@ public class TraitValue
     public double value;
 }
 
-public class Personality : List<TraitValue>
-{
-    
-}
+public class Personality : List<TraitValue> {}
 
 [System.Serializable]
-public record PersonalityData
+public record PersonalityData // there is no way
 {
     public TraitValue[] traitValues;
 }

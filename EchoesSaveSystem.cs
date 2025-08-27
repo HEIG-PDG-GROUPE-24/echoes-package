@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("SaveSystemTests")]
 
 /**
  * System managing saves of runtime evolving data
@@ -15,10 +18,11 @@ public record SerializableNpcData
 
 public abstract class EchoesSaveSystem
 {
-    protected abstract void Write();
-    protected abstract void Read();
+    internal abstract void Write();
+    internal abstract void Read();
 
-    protected SerializableNpcData NpcData;
+    internal SerializableNpcData NpcData;
+    
     
     public void Save()
     {
@@ -54,7 +58,7 @@ public class JsonEchoesSaveSystem : EchoesSaveSystem
     public string SaveDirectory{set;get;} = Application.persistentDataPath;
     const string FILENAME = "Echoes.json";
     
-    protected override void Write()
+    internal override void Write()
     {
         File.WriteAllText(
             Path.Combine(SaveDirectory, FILENAME),
@@ -62,7 +66,7 @@ public class JsonEchoesSaveSystem : EchoesSaveSystem
             );
     }
 
-    protected override void Read()
+    internal override void Read()
     {
         NpcData = JsonUtility.FromJson<SerializableNpcData>(
             File.ReadAllText(Path.Combine(SaveDirectory, FILENAME))
@@ -76,15 +80,15 @@ public class BinaryEchoesSaveSystem : EchoesSaveSystem
     public string SaveDirectory{set;get;} = Application.persistentDataPath;
     private const string FILENAME = "Echoes.bin";
     
-    protected override void Write()
+    internal override void Write()
     {
         using FileStream os = File.Open(Path.Combine(SaveDirectory,FILENAME), FileMode.Create);
         _formatter.Serialize(os, NpcData);
     }
 
-    protected override void Read()
+    internal override void Read()
     {
-        using FileStream os = File.Open(Path.Combine(SaveDirectory,FILENAME), FileMode.Create);
+        using FileStream os = File.Open(Path.Combine(SaveDirectory,FILENAME), FileMode.Open);
         NpcData = (SerializableNpcData)_formatter.Deserialize(os);
     }
 }
