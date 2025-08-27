@@ -1,24 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Sirenix.OdinInspector;
-using UnityEditor;
+using UnityEngine;
 
-namespace Echoes
+namespace Echoes.Runtime
 {
-    [CreateAssetMenu(fileName = "NPCSo", menuName = "Scriptable Objects/NPCSo")]
-    public class NPCSo : ScriptableObject
+    [CreateAssetMenu(fileName = "NPCSo", menuName = "Scriptable Objects/Echoes - NPC")]
+    public class NPCGeneratorSo : ScriptableObject
     {
-        [SerializeField] private string name;
+        private string Name;
 
         [TabGroup("Infos", "Contacts", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
         [ValueDropdown("TreeViewOfInts", ExpandAllMenuItems = true)]
         public List<int> IntTreview = new List<int>() { 1, 2, 7 };
 
         [TabGroup("Infos", "Trust", SdfIconType.Shield, TextColor = "#F7D6E0")]
-        [ListDrawerSettings(Expanded = true, DraggableItems = true)]
-        public List<TrustRow> Contacts = new List<TrustRow>()
+        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
+        public List<TrustRow> Contacts = new()
         {
             new TrustRow("Alice", 5),
             new TrustRow("Bob", 3)
@@ -81,7 +80,7 @@ namespace Echoes
             new TraitsRow("Brave", 7),
             new TraitsRow("Cautious", 4)
         };
-        
+
         [TabGroup("Infos", "Opinion", SdfIconType.Question, TextColor = "#FFE156")]
         [ListDrawerSettings(
             ShowItemCount = true,

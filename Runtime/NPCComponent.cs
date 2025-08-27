@@ -1,13 +1,13 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Echoes
+namespace Echoes.Runtime
 {
     public class NPCEchoes : MonoBehaviour
     {
         
         [InlineEditor]
-        public NPCSo npcData;
+        public NPCGeneratorSo npcData;
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()

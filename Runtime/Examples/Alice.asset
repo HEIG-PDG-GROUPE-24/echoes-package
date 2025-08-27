@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40c953acc262c76a5b9b3ec1e6d94319, type: 3}
   m_Name: Alice
   m_EditorClassIdentifier: Echoes::Echoes.NPCSo
-  name: 
   IntTreview: 010000000200000007000000
   Contacts:
   - ContactName: Alice
-    TrustLevel: 2
+    TrustLevel: 5
   - ContactName: Bob
     TrustLevel: 8
   Traits:
   - TraitName: Brave
-    Intensity: 7
+    Intensity: 5
   - TraitName: Cautious
     Intensity: 4
-  top: 0
+  Opinions:
+  - TraitName: Brave
+    Intensity: 8
+  - TraitName: Cautious
+    Intensity: 8
