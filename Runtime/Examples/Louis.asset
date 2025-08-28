@@ -10,41 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c953acc262c76a5b9b3ec1e6d94319, type: 3}
-  m_Name: Alice
+  m_Name: Louis
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
-  Name: Alice
-  Contacts:
-  - {fileID: 0}
-  Trusts:
-  - Contact: {fileID: 0}
-    TrustLevel: 6
+  Name: Louis
+  Contacts: []
+  Trusts: []
   Traits:
   - Name: Boop
-    Intensity: 6.9
-    Min: 1
-    Max: 10
+    Intensity: 6.48
+    Min: 0
+    Max: 0
   - Name: Test
-    Intensity: 7.02
-    Min: 1
-    Max: 10
+    Intensity: 8.45
+    Min: 0
+    Max: 0
   - Name: Blop
-    Intensity: 1
-    Min: 1
-    Max: 10
+    Intensity: 8.75
+    Min: 0
+    Max: 0
   - Name: 
-    Intensity: 1
-    Min: 1
-    Max: 10
+    Intensity: 2.79
+    Min: 0
+    Max: 0
   - Name: 
-    Intensity: 1
-    Min: 1
-    Max: 10
+    Intensity: 2.79
+    Min: 0
+    Max: 0
   - Name: 
-    Intensity: 1
-    Min: 1
-    Max: 10
+    Intensity: 2.79
+    Min: 0
+    Max: 0
   - Name: 
-    Intensity: 1
-    Min: 1
-    Max: 10
+    Intensity: 2.79
+    Min: 0
+    Max: 0
   Opinions: []

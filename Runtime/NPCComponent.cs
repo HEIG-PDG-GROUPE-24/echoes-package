@@ -97,5 +97,7 @@ namespace Echoes.Runtime
         {
         
         }
+        
+        public override string ToString() => npcData != null ? npcData.Name : "No NPC Data";
     }
 }

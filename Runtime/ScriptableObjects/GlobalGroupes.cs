@@ -8,7 +8,7 @@ namespace Echoes.Runtime
 {
     
     [Serializable]
-    class GlobalGroupes
+    public class GlobalGroupes
     {
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
         public List<GroupesRow> Groupes = new();
@@ -18,13 +18,13 @@ namespace Echoes.Runtime
         {
             public string Name = "New Groupe";
 
-            [ListDrawerSettings(Expanded = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
-            public List<NPC> Members = new();
+            [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
+            public List<NPCEchoes> Members = new();
 
             private IEnumerable GetAllNPCs()
             {
-                // You can fetch from a central registry, a Resources folder, or a static database
-                return null;
+                List<NPCEchoes> npcs = EchoesGlobal.GetAllNPCs();
+                return npcs;
             }
         }
     }

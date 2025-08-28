@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -8,25 +9,27 @@ namespace Echoes.Runtime
     [Serializable]
     public class TrustRow
     {
-        [ValueDropdown("GetNames")] public string ContactName;
+        public NPC current { private get; set; }
+        public float Min { get; set; }
+        public float Max { get; set; }
 
-        [Range(0, 10)] public int TrustLevel;
+        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
+        public NPCEchoes Contact = new();
+
+
+        [PropertyRange("Min", "Max")] public int TrustLevel;
 
         [Button(ButtonSizes.Small)]
         public void ResetTrust()
         {
-            TrustLevel = 5; // default value
+            TrustLevel = Mathf.RoundToInt((Min + Max) / 2);
         }
 
-        public TrustRow(string name, int trust)
+        private IEnumerable GetAllNPCs()
         {
-            ContactName = name;
-            TrustLevel = trust;
-        }
-        
-        private static IEnumerable<string> GetNames()
-        {
-            return new List<string>() { "Alice", "Bob", "Charlie" };
+            List<NPCEchoes> npcs = EchoesGlobal.GetAllNPCs();
+            npcs.RemoveAll(npc => npc.npcData.Name == current.Name);
+            return npcs;
         }
     }
 }

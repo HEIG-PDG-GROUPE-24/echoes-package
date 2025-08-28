@@ -7,10 +7,10 @@ using UnityEngine;
 namespace Echoes.Runtime
 {
     [Serializable]
-    class GlobalTrust
+    public class GlobalTrust
     {
         [OnValueChanged(nameof(ClampBetweenValues))]
-        public float minValue = 0f;
+        public float minValue = 1f;
         
         [OnValueChanged(nameof(ClampBetweenValues))]
         public float maxValue = 10f;

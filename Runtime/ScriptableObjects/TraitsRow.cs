@@ -7,19 +7,22 @@ namespace Echoes.Runtime.ScriptableObjects
     [Serializable]
     public class TraitsRow
     {
-        public string Name;
+        [ReadOnly] public string Name;
 
-        [HideInInspector] public float Min;
-        [HideInInspector] public float Max;
-
-        [PropertyRange("@Min", "@Max")]
-        [InlineButton("@Intensity = Min", "Reset")]
+        [PropertyRange("@Min", "@Max")] [InlineButton("@Intensity = Min", "Reset")]
         public float Intensity;
 
-        public TraitsRow(string name, int intensity)
+        public TraitsRow()
+        {
+        }
+
+        public TraitsRow(string name, float intensity)
         {
             Name = name;
             Intensity = intensity;
         }
+
+        [HideInInspector] public float Min;
+        [HideInInspector] public float Max;
     }
 }

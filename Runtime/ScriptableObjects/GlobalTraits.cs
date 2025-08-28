@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Echoes.Runtime.ScriptableObjects
 {
     [Serializable]
-    class GlobalTraits
+    public class GlobalTraits
     {
-        [OnValueChanged(nameof(ClampAllIntensities))]
+        [Required] [OnValueChanged(nameof(ClampAllIntensities))]
         public float minValue = 1f;
 
-        [OnValueChanged(nameof(ClampAllIntensities))]
+        [Required] [OnValueChanged(nameof(ClampAllIntensities))]
         public float maxValue = 10f;
 
         [ListDrawerSettings(
@@ -19,8 +19,9 @@ namespace Echoes.Runtime.ScriptableObjects
             DraggableItems = true,
             OnBeginListElementGUI = nameof(OnRowAdded)
         )]
-        public List<TraitsRow> Traits = new();
-        
+        [OnCollectionChanged(nameof(UpdateAllNPCs))]
+        public List<GlobalTraitsRow> Traits = new();
+
         private void ClampAllIntensities()
         {
             if (minValue > maxValue) (minValue, maxValue) = (maxValue, minValue);
@@ -31,7 +32,7 @@ namespace Echoes.Runtime.ScriptableObjects
                 t.Intensity = Mathf.Clamp(t.Intensity, minValue, maxValue);
             }
         }
-        
+
         private void OnRowAdded(int index)
         {
             if (index < 0 || index >= Traits.Count)
@@ -43,5 +44,13 @@ namespace Echoes.Runtime.ScriptableObjects
             row.Intensity = Mathf.Clamp(row.Intensity, minValue, maxValue);
         }
 
+        private void UpdateAllNPCs()
+        {
+            var allNpcs = EchoesGlobal.GetAllNPCs();
+            foreach (var npc in allNpcs)
+            {
+                npc.npcData.SyncWithGlobalTraits();
+            }
+        }
     }
 }
