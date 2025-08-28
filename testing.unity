@@ -130,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 1309453663494645481, guid: 8a388626145acd5c2bdd51808fe07438, type: 3}
       propertyPath: GlobalStats
       value: 
-      objectReference: {fileID: 11400000, guid: 08fb3d07e5c22db9faccfe0e72bc00ba, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 1309453663494645481, guid: 8a388626145acd5c2bdd51808fe07438, type: 3}
       propertyPath: m_EditorClassIdentifier
       value: Echoes::Echoes.Runtime.NewMonoBehaviourScript

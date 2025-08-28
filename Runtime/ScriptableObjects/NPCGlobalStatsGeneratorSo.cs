@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+using Echoes.Runtime.ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -22,6 +21,5 @@ namespace Echoes.Runtime
         [InlineProperty, HideLabel]
         [SerializeField]
         private GlobalTrust globalTrust = new GlobalTrust();
-
     }
 }

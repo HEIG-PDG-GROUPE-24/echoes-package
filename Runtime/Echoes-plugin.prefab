@@ -43,5 +43,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8d7e298afcd3e63ab18c23f86154708, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Echoes::Echoes.NewMonoBehaviourScript
-  GlobalStats: {fileID: 11400000, guid: 08fb3d07e5c22db9faccfe0e72bc00ba, type: 2}
+  m_EditorClassIdentifier: Echoes::Echoes.Runtime.NewMonoBehaviourScript
+  GlobalStats: {fileID: 11400000, guid: a9545939a7c1220598c33f3afd9f1835, type: 2}
