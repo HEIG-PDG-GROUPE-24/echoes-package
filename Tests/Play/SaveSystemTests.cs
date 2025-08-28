@@ -1,7 +1,9 @@
-using System.Collections;
+using Echoes.Runtime;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Rendering;
+
+using Echoes.Runtime.SerializableDataStructs;
+using Echoes.Runtime.SaveSystem;
 
 namespace Tests.Play
 {
@@ -42,7 +44,7 @@ namespace Tests.Play
             
             for (int i = 0; i < size; i++)
             {
-                npcs.data[i] = new EchoesNpcData(new EchoesNpc());
+                npcs.data[i] = new EchoesNpcData(new NPCEchoes());
                 npcs.data[i].name = "Name " + i;
                 npcs.data[i].trustLevels = RandomInformantsTrustLevels();
                 npcs.data[i].npcPersonality = RandomPersonalityData();
@@ -59,7 +61,7 @@ namespace Tests.Play
             {
                 data = new EchoesNpcData[1]
             };
-            npcsData.data[0] = new EchoesNpcData(new EchoesNpc())
+            npcsData.data[0] = new EchoesNpcData(new NPCEchoes())
             {
                 name = nom
             };

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Echoes.Runtime.SerializableDataStructs;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,6 +11,11 @@ namespace Echoes.Runtime
         
         [InlineEditor]
         public NPC npcData;
+
+        public void LoadFromData(EchoesNpcData data)
+        {
+            throw new NotImplementedException();
+        }
 
         public Dictionary<string,double> OpinionOfPlayer { private set; get; }
         private Dictionary<string, double> personality;
