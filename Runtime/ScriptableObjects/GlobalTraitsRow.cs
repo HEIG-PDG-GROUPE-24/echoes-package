@@ -10,18 +10,11 @@ namespace Echoes.Runtime.ScriptableObjects
         [Required]
         [OnValueChanged(nameof(UpdateAllNPCs))]
         public string Name;
+        
 
-        [HideInInspector] public float Min;
-        [HideInInspector] public float Max;
-
-        [PropertyRange("@Min", "@Max")]
-        [InlineButton("@Intensity = Min", "Reset")]
-        public float Intensity;
-
-        public GlobalTraitsRow(string name, int intensity)
+        public GlobalTraitsRow(string name)
         {
             Name = name;
-            Intensity = intensity;
         }
         
         private void UpdateAllNPCs()

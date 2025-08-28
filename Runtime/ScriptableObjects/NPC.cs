@@ -98,17 +98,21 @@ namespace Echoes.Runtime
         {
             var olderTraits = new List<TraitsRow>(Traits);
             var olderOpinions = new List<TraitsRow>(Opinions);
-            
+
             Traits.Clear();
             Opinions.Clear();
             List<GlobalTraitsRow> newer = NPCGlobalStatsGeneratorSo.Instance.globalTraits.Traits;
-            
+            var min = NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+
             foreach (var t in newer)
             {
-                
-                Traits.Add(new TraitsRow(t.Name, olderTraits.Find(x => x.Name == t.Name)?.Intensity ?? t.Intensity));
-                Opinions.Add(new TraitsRow(t.Name, olderOpinions.Find(x => x.Name == t.Name)?.Intensity ?? t.Intensity));
+                var oldTrait = olderTraits.Find(x => x.Name == t.Name);
+                var oldOpinion = olderOpinions.Find(x => x.Name == t.Name);
+
+                Traits.Add(new TraitsRow(t.Name, oldTrait != null ? oldTrait.Intensity : min));
+                Opinions.Add(new TraitsRow(t.Name, oldOpinion != null ? oldOpinion.Intensity : min));
             }
         }
+
     }
 }
