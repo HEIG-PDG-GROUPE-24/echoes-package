@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Echoes.Runtime.SerializableDataStructs;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,17 +13,64 @@ namespace Echoes.Runtime
         [InlineEditor]
         public NPC npcData;
 
-        public void LoadFromData(EchoesNpcData data)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Dictionary<string,double> OpinionOfPlayer { private set; get; }
-        private Dictionary<string, double> personality;
-        private Dictionary<string, double> informantsTrust;
+        public Dictionary<string,double> OpinionOfPlayer { private set; get; } =  new Dictionary<string, double>();
+        public Dictionary<string, double> Personality {private set; get;} = new Dictionary<string, double>();
+        public Dictionary<string, double> InformantsTrust {private set; get; } = new Dictionary<string, double>();
+        public HashSet<NPCEchoes> Contacts { private set; get; } = new HashSet<NPCEchoes>();
 
         public bool InPlayerInteraction { private set; get; }
         public bool AcceptsInterferenceDuringInteraction {private set; get;}
+        
+        /**
+         * Loads npc state from serializable data
+         * @param data serializable data to load
+         */
+        public void LoadFromData(EchoesNpcData data)
+        {
+            if(npcData != null && npcData.name != data.name)
+                throw new ArgumentException("Name of NPC doesn't match");
+
+            bool dataIsComplete = true; 
+            
+            OpinionOfPlayer = new Dictionary<string, double>();
+            if (data.opinionOfPlayer != null)
+                foreach (var trait in data.opinionOfPlayer)
+                    OpinionOfPlayer.Add(trait.traitName, trait.value);
+            else dataIsComplete = false;
+
+            Personality = new Dictionary<string, double>();
+            if(data.npcPersonality != null)
+                foreach (var trait in data.npcPersonality)
+                    Personality.Add(trait.traitName, trait.value);
+            else dataIsComplete = false;
+            
+            InformantsTrust =  new Dictionary<string, double>();
+            if(data.trustLevels != null)
+                foreach (var trust in data.trustLevels)
+                    InformantsTrust.Add(trust.informantName,trust.level);
+            else dataIsComplete = false;
+
+            if (!dataIsComplete)
+                throw new ArgumentException("Data is incomplete");
+        }
+
+        /**
+         * Set npc state to default, IE the state defined in the editor and stored in the SO file.
+         */
+        public void LoadFromSo()
+        {
+            OpinionOfPlayer = new Dictionary<string, double>();
+            foreach (var trait in npcData.Opinions)
+                OpinionOfPlayer.Add(trait.Name, trait.Intensity);
+
+            Personality = new Dictionary<string, double>();
+            foreach (var trait in npcData.Traits)
+                Personality.Add(trait.Name, trait.Intensity);
+            
+            InformantsTrust =  new Dictionary<string, double>();
+            foreach (var trust in npcData.Trusts)
+                InformantsTrust.Add(trust.ContactName,trust.TrustLevel);
+        }
 
         /**
          * @param x number to normalize
@@ -44,7 +92,7 @@ namespace Echoes.Runtime
 
         public double TrustTowards(NPCEchoes other)
         {
-            return informantsTrust[other.npcData.name];
+            return InformantsTrust[other.npcData.name];
         }
 
         /**
@@ -53,11 +101,11 @@ namespace Echoes.Runtime
         public double AppreciationOfPlayer()
         {
             double score = 0;
-            foreach (var trait in personality.Keys)
+            foreach (var trait in Personality.Keys)
             {
-                double maxDiff = 10; // max - min
-                double diff = Math.Abs(OpinionOfPlayer[trait] - personality[trait]);
-                score += Normalize(diff,0,maxDiff) / personality.Count;
+                double maxDiff = 1; // max - min
+                double diff = Math.Abs(OpinionOfPlayer[trait] - Personality[trait]);
+                score -= Normalize(diff,0,maxDiff) / Personality.Count;
             }
             return score;
         }
@@ -72,7 +120,10 @@ namespace Echoes.Runtime
 
         public void EndPlayerInteraction()
         {
-            // For each contact, give them our opinion of the player
+            foreach (var contact in Contacts)
+            {
+                contact.ReceiveOpinion(this);
+            }
         }
 
         protected bool ReceiveOpinion(NPCEchoes from)
@@ -80,11 +131,11 @@ namespace Echoes.Runtime
             if (InPlayerInteraction && !AcceptsInterferenceDuringInteraction) return false;
             //adjust current opinion
             double trustLevel = TrustTowards(from);
-            foreach (var trait in OpinionOfPlayer.Keys)
+            foreach (var trait in OpinionOfPlayer.Keys.ToList())
             {
-                double average = OpinionOfPlayer[trait] + from.OpinionOfPlayer[trait];
-                double diff = OpinionOfPlayer[trait] - average;
-                OpinionOfPlayer[trait] += diff * Normalize(trustLevel, 0, 10);
+                double average = (OpinionOfPlayer[trait] + from.OpinionOfPlayer[trait]) / 2;
+                double diff = average - OpinionOfPlayer[trait];
+                OpinionOfPlayer[trait] += diff * ((Normalize(trustLevel, 0, 10)+1)/2);
             }
             
             return true;

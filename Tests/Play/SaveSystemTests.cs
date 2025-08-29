@@ -44,7 +44,7 @@ namespace Tests.Play
             
             for (int i = 0; i < size; i++)
             {
-                npcs.data[i] = new EchoesNpcData(new NPCEchoes());
+                npcs.data[i] = new EchoesNpcData(new NPCEchoes(),false);
                 npcs.data[i].name = "Name " + i;
                 npcs.data[i].trustLevels = RandomInformantsTrustLevels();
                 npcs.data[i].npcPersonality = RandomPersonalityData();
@@ -61,7 +61,7 @@ namespace Tests.Play
             {
                 data = new EchoesNpcData[1]
             };
-            npcsData.data[0] = new EchoesNpcData(new NPCEchoes())
+            npcsData.data[0] = new EchoesNpcData(new NPCEchoes(),false)
             {
                 name = nom
             };
