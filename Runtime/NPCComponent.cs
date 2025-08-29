@@ -69,7 +69,7 @@ namespace Echoes.Runtime
             
             InformantsTrust =  new Dictionary<string, double>();
             foreach (var trust in npcData.Trusts)
-                InformantsTrust.Add(trust.ContactName,trust.TrustLevel);
+                InformantsTrust.Add(trust.Contact.name,trust.TrustLevel);
         }
 
         /**
