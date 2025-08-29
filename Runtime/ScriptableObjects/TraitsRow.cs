@@ -9,7 +9,7 @@ namespace Echoes.Runtime.ScriptableObjects
     {
         [ReadOnly] public string Name;
 
-        [PropertyRange("@Min", "@Max")] [InlineButton("@Intensity = Min", "Reset")]
+        [PropertyRange("@Min", "@Max")] [InlineButton("@Intensity = (Min + Max) / 2", "Reset")]
         public float Intensity;
 
         public TraitsRow()

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Louis
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
   Name: Louis
-  Contacts: []
+  Contacts:
+  - {fileID: 0}
   Trusts: []
   Traits:
   - Name: Boop

@@ -17,38 +17,12 @@ MonoBehaviour:
     maxValue: 10
     Traits:
     - Name: Boop
-      Min: 1
-      Max: 10
-      Intensity: 2.93
     - Name: Test
-      Min: 1
-      Max: 10
-      Intensity: 7.53
     - Name: Blop
-      Min: 1
-      Max: 10
-      Intensity: 3.13
-    - Name: 
-      Min: 1
-      Max: 10
-      Intensity: 1
-    - Name: 
-      Min: 1
-      Max: 10
-      Intensity: 1
-    - Name: 
-      Min: 1
-      Max: 10
-      Intensity: 1
-    - Name: 
-      Min: 1
-      Max: 10
-      Intensity: 1
   globalGroupes:
     Groupes:
     - Name: New Groupe
       Members:
-      - {fileID: 0}
       - {fileID: 0}
     - Name: New Groupe
       Members:

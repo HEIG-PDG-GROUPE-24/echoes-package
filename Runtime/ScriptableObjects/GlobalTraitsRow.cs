@@ -16,7 +16,12 @@ namespace Echoes.Runtime.ScriptableObjects
         {
             Name = name;
         }
-        
+
+        public GlobalTraitsRow()
+        {
+            Name = "New Trait";
+        }
+
         private void UpdateAllNPCs()
         {
             var allNpcs = EchoesGlobal.GetAllNPCs();
