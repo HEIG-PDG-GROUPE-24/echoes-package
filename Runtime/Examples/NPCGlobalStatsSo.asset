@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: NPCGlobalStatsSo
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPCGlobalStatsGeneratorSo
   globalTraits:
-    minValue: 1
+    minValue: 5
     maxValue: 10
     Traits:
-    - Name: Boop
-    - Name: Test
-    - Name: Blop
+    - Name: BlopA
+    - Name: ASD
   globalGroupes:
     Groupes:
     - Name: New Groupe
@@ -28,5 +27,5 @@ MonoBehaviour:
       Members:
       - {fileID: 0}
   globalTrust:
-    minValue: 1
+    minValue: 5
     maxValue: 10

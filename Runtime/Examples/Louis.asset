@@ -15,34 +15,24 @@ MonoBehaviour:
   Name: Louis
   Contacts:
   - {fileID: 0}
-  Trusts: []
+  Trusts:
+  - Contact: {fileID: 0}
+    TrustLevel: 8
   Traits:
-  - Name: Boop
-    Intensity: 6.48
-    Min: 0
-    Max: 0
-  - Name: Test
-    Intensity: 8.45
-    Min: 0
-    Max: 0
-  - Name: Blop
-    Intensity: 8.75
-    Min: 0
-    Max: 0
-  - Name: 
-    Intensity: 2.79
-    Min: 0
-    Max: 0
-  - Name: 
-    Intensity: 2.79
-    Min: 0
-    Max: 0
-  - Name: 
-    Intensity: 2.79
-    Min: 0
-    Max: 0
-  - Name: 
-    Intensity: 2.79
-    Min: 0
-    Max: 0
-  Opinions: []
+  - Name: BlopA
+    Intensity: 5
+    Min: 5
+    Max: 10
+  - Name: ASD
+    Intensity: 7.5
+    Min: 5
+    Max: 10
+  Opinions:
+  - Name: BlopA
+    Intensity: 6.16
+    Min: 5
+    Max: 10
+  - Name: ASD
+    Intensity: 7.5
+    Min: 5
+    Max: 10

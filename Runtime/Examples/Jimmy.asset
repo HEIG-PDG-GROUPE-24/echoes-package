@@ -10,28 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40c953acc262c76a5b9b3ec1e6d94319, type: 3}
-  m_Name: Alice
+  m_Name: Jimmy
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
-  Name: Alice
+  Name: Jimmy
   Contacts: []
-  Trusts:
-  - Contact: {fileID: 0}
-    TrustLevel: 6
-  Traits:
-  - Name: BlopA
-    Intensity: 0
-    Min: 0
-    Max: 0
-  - Name: ASD
-    Intensity: 0
-    Min: 0
-    Max: 0
-  Opinions:
-  - Name: BlopA
-    Intensity: 5
-    Min: 5
-    Max: 10
-  - Name: ASD
-    Intensity: 5
-    Min: 5
-    Max: 10
+  Trusts: []
+  Traits: []
+  Opinions: []
