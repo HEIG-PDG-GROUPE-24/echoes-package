@@ -38,14 +38,16 @@ namespace Tests.Play
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
 
-            npc1.OpinionOfPlayer["test"] =
+            npc1.SetOpinionOfPlayer("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.3 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-            npc2.OpinionOfPlayer["test"] =
+                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+            );
+            npc2.SetOpinionOfPlayer("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+            );
 
             npc1.Contacts.Add(npc2);
             npc2.Contacts.Add(npc1);
@@ -65,7 +67,8 @@ namespace Tests.Play
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
-                npc2.OpinionOfPlayer["test"], 0.0001);
+                npc2.GetOpinionOfPlayer("test"), 0.0001
+            );
         }
 
         [Test]
@@ -78,7 +81,8 @@ namespace Tests.Play
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
-                npc2.OpinionOfPlayer["test"], 0.0001);
+                npc2.GetOpinionOfPlayer("test"), 0.0001
+            );
         }
 
         [Test]
@@ -103,7 +107,7 @@ namespace Tests.Play
         [Test]
         public void DataToObject()
         {
-            EchoesNpcData npcData = new EchoesNpcData(new NPCEchoes(), false);
+            EchoesNpcData npcData = new EchoesNpcData(new NPCEchoes());
             NPCEchoes npcObject = new NPCEchoes();
 
             npcData.npcPersonality = new TraitValue[1];
@@ -119,7 +123,7 @@ namespace Tests.Play
         private void AssertEqual(EchoesNpcData data, NPCEchoes npc)
         {
             foreach (var trait in data.opinionOfPlayer)
-                Assert.AreEqual(trait.value, npc.OpinionOfPlayerRegarding(trait.traitName));
+                Assert.AreEqual(trait.value, npc.GetOpinionOfPlayer(trait.traitName));
 
             foreach (var trait in data.npcPersonality)
                 Assert.AreEqual(trait.value, npc.Personality[trait.traitName]);

@@ -3,7 +3,6 @@ using System.Linq;
 
 namespace Echoes.Runtime.SerializableDataStructs
 {
-
     [Serializable]
     public record EchoesNpcData
     {
@@ -14,59 +13,40 @@ namespace Echoes.Runtime.SerializableDataStructs
 
         public TrustLevel[] trustLevels;
 
-        public EchoesNpcData(NPCEchoes npc, bool enforceCompleteData = true)
+        public EchoesNpcData(NPCEchoes npc)
         {
-            if (enforceCompleteData && (
-                    npc.OpinionOfPlayer == null ||
-                    npc.Personality == null ||
-                    npc.InformantsTrust == null
-                ))
-                throw new ArgumentException("Npc is incomplete, objects are missing", nameof(npc));
-            
-            
-            if (npc.OpinionOfPlayer != null)
+            opinionOfPlayer = new TraitValue[npc.GetPlayerOpinionTraits().Count];
+            int i = 0;
+            foreach (var trait in npc.GetPlayerOpinionTraits())
             {
-                opinionOfPlayer = new TraitValue[npc.OpinionOfPlayer.Count];
-                int i = 0;
-                foreach (var trait in npc.OpinionOfPlayer.Keys)
+                opinionOfPlayer[i++] = new TraitValue
                 {
-                    opinionOfPlayer[i++] = new TraitValue
-                    {
-                        traitName = trait,
-                        value = npc.OpinionOfPlayer[trait]
-                    };
-                }
+                    traitName = trait,
+                    value = npc.GetOpinionOfPlayer(trait)
+                };
             }
-            
-            if (npc.Personality != null)
+
+            npcPersonality = new TraitValue[npc.Personality.Count];
+            i = 0;
+            foreach (var trait in npc.Personality.Keys)
             {
-                npcPersonality = new TraitValue[npc.Personality.Count];
-                int i = 0;
-                foreach (var trait in npc.Personality.Keys)
+                npcPersonality[i++] = new TraitValue
                 {
-                    npcPersonality[i++] = new TraitValue
-                    {
-                        traitName = trait,
-                        value = npc.Personality[trait]
-                    };
-                }
+                    traitName = trait,
+                    value = npc.Personality[trait]
+                };
             }
-            
-            if (npc.InformantsTrust != null)
+
+            trustLevels = new TrustLevel[npc.InformantsTrust.Count];
+            i = 0;
+            foreach (var informantName in npc.InformantsTrust.Keys)
             {
-                trustLevels = new TrustLevel[npc.InformantsTrust.Count];
-                int i = 0;
-                foreach (var informantName in npc.InformantsTrust.Keys)
+                trustLevels[i++] = new TrustLevel
                 {
-                    trustLevels[i++] = new TrustLevel
-                    {
-                        informantName = informantName,
-                        level = npc.InformantsTrust[informantName]
-                    };
-                }
+                    informantName = informantName,
+                    level = npc.InformantsTrust[informantName]
+                };
             }
         }
-
     }
 }
-    

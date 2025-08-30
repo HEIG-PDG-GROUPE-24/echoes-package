@@ -11,11 +11,46 @@ namespace Echoes.Runtime
     {
         [InlineEditor] public NPC npcData;
 
-        public Dictionary<string, double> OpinionOfPlayer { private set; get; } = new();
+        private Dictionary<string, double> _opinionOfPlayer = new();
+
+        /**
+         * @param traitName name of the trait to fetch value for
+         * @return value corresponding to this trait
+         */
+        public double GetOpinionOfPlayer(string traitName)
+        {
+            return _opinionOfPlayer[traitName];
+        }
+
+        public void SetOpinionOfPlayer(string traitName, double opinion)
+        {
+            if (!IsValidTraitValue(opinion))
+                throw new ArgumentOutOfRangeException(nameof(opinion), opinion,
+                    "Should be between minimum and maximum inclusive values for traits");
+
+            _opinionOfPlayer[traitName] = opinion;
+        }
+
+        public void AddToOpinionOfPlayer(string traitName, double value)
+        {
+            value += _opinionOfPlayer[traitName];
+            
+            if (!IsValidTraitValue(value))
+                throw new ArgumentOutOfRangeException(nameof(value), value,
+                    "Should be between minimum and maximum inclusive values for traits");
+            
+            _opinionOfPlayer[traitName] = value;
+        }
+
+        public List<string> GetPlayerOpinionTraits()
+        {
+            return _opinionOfPlayer.Keys.ToList();
+        }
+
         public Dictionary<string, double> Personality { private set; get; } = new();
         public Dictionary<string, double> InformantsTrust { private set; get; } = new();
         public HashSet<NPCEchoes> Contacts { private set; get; } = new();
-        public Dictionary<string, double> LastInformantInfluence{private set; get;}
+        private Dictionary<string, double> _lastInformantInfluence = new();
 
         public bool InPlayerInteraction { private set; get; } = false;
         public bool AcceptsInterferenceDuringInteraction { private set; get; } = false;
@@ -32,10 +67,10 @@ namespace Echoes.Runtime
 
             bool dataIsComplete = true;
 
-            OpinionOfPlayer.Clear();
+            _opinionOfPlayer.Clear();
             if (data.opinionOfPlayer != null)
                 foreach (var trait in data.opinionOfPlayer)
-                    OpinionOfPlayer.Add(trait.traitName, trait.value);
+                    _opinionOfPlayer.Add(trait.traitName, trait.value);
             else dataIsComplete = false;
 
             Personality.Clear();
@@ -56,13 +91,13 @@ namespace Echoes.Runtime
 
         /**
          * Set npc state to default, IE the state defined in the editor and stored in the SO file.
-         * It also combines contacts and group members into a single Contacts Set 
+         * It also combines contacts and group members into a single Contacts Set
          */
         public void LoadFromSo()
         {
-            OpinionOfPlayer.Clear();
+            _opinionOfPlayer.Clear();
             foreach (var trait in npcData.Opinions)
-                OpinionOfPlayer.Add(trait.Name, trait.Intensity);
+                _opinionOfPlayer.Add(trait.Name, trait.Intensity);
 
             Personality.Clear();
             foreach (var trait in npcData.Traits)
@@ -77,6 +112,8 @@ namespace Echoes.Runtime
             {
                 Contacts.Add(contact);
             }
+
+            _lastInformantInfluence.Clear();
 
             foreach (var group in NPCGlobalStatsGeneratorSo.Instance.globalGroupes.Groupes.Where(group =>
                          group.Members.Contains(this)))
@@ -100,15 +137,6 @@ namespace Echoes.Runtime
         }
 
         /**
-         * @param traitName name of the trait to fetch value for
-         * @return value corresponding to this trait
-         */
-        public double OpinionOfPlayerRegarding(string traitName)
-        {
-            return OpinionOfPlayer[traitName];
-        }
-
-        /**
          * @param other
          * @return trust value of this npc towards other
          */
@@ -127,7 +155,7 @@ namespace Echoes.Runtime
             {
                 double maxDiff = NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-                double diff = Math.Abs(OpinionOfPlayer[trait] - Personality[trait]);
+                double diff = Math.Abs(_opinionOfPlayer[trait] - Personality[trait]);
                 score -= Normalize(diff, 0, maxDiff) / Personality.Count;
             }
 
@@ -154,12 +182,14 @@ namespace Echoes.Runtime
          */
         public void EndPlayerInteraction()
         {
-            double appreciationDiff =  AppreciationOfPlayer() - _appreciationOfPlayerAtStartOfInteraction;
-            foreach (var informant in LastInformantInfluence.Keys.ToList())
+            double appreciationDiff = AppreciationOfPlayer() - _appreciationOfPlayerAtStartOfInteraction;
+            foreach (var informant in _lastInformantInfluence.Keys.ToList())
             {
-                InformantsTrust[informant] +=  appreciationDiff * LastInformantInfluence[informant];
+                InformantsTrust[informant] += (appreciationDiff * _lastInformantInfluence[informant]) *
+                                              (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
+                                               NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue);
             }
-            
+
             foreach (var contact in Contacts)
             {
                 contact.ReceiveOpinion(this);
@@ -178,35 +208,31 @@ namespace Echoes.Runtime
                 InformantsTrust.Add(from.npcData.name,
                     (NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue +
                      NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue) / 2);
-            
+
             double startingPlayerAppreciation = AppreciationOfPlayer();
 
             //adjust current opinion
             double trustLevel = TrustTowards(from);
-            foreach (var trait in OpinionOfPlayer.Keys.ToList())
+            foreach (var trait in _opinionOfPlayer.Keys.ToList())
             {
-                double average = (OpinionOfPlayer[trait] + from.OpinionOfPlayer[trait]) / 2;
-                double diff = average - OpinionOfPlayer[trait];
-                OpinionOfPlayer[trait] += diff * ((Normalize(trustLevel,
+                double average = (_opinionOfPlayer[trait] + from._opinionOfPlayer[trait]) / 2;
+                double diff = average - _opinionOfPlayer[trait];
+                _opinionOfPlayer[trait] += diff * ((Normalize(trustLevel,
                     NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
                     NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue) + 1) / 2);
             }
-            
-            LastInformantInfluence[from.npcData.name] = AppreciationOfPlayer() - startingPlayerAppreciation;
+
+            _lastInformantInfluence[from.npcData.name] = AppreciationOfPlayer() - startingPlayerAppreciation;
 
             return true;
         }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
-        
         public override string ToString() => npcData != null ? npcData.Name : "No NPC Data";
+        
+        private Boolean IsValidTraitValue(double value)
+        {
+            return value <= NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue ||
+                   value >= NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+        }
     }
 }
