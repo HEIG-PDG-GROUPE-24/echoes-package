@@ -31,11 +31,11 @@ namespace Echoes.Runtime
         public void AddToOpinionOfPlayer(string traitName, double value)
         {
             value += _opinionOfPlayer[traitName];
-            
+
             if (!IsValidTraitValue(value))
                 throw new ArgumentOutOfRangeException(nameof(value), value,
                     "Should be between minimum and maximum inclusive values for traits");
-            
+
             _opinionOfPlayer[traitName] = value;
         }
 
@@ -52,10 +52,31 @@ namespace Echoes.Runtime
                     "Should be between minimum and maximum values for traits");
             _personality[traitName] = value;
         }
-        
+
         public List<string> GetPersonalityTraits() => _personality.Keys.ToList();
+
+        private Dictionary<string, double> _informantsTrust = new();
+
+        /**
+         * @param other
+         * @return trust value of this npc towards other
+         */
+        public double GetTrustTowards(NPCEchoes other) => _informantsTrust[other.npcData.name];
+        public double GetTrustTowards(string informantName) => _informantsTrust[informantName];
+
+        public void SetTrustTowards(NPCEchoes other, double value) => SetTrustTowards(other.npcData.name, value);
+        public void SetTrustTowards(string informantName, double value)
+        {
+            if (value < NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue ||
+                value > NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue
+               ) throw new ArgumentOutOfRangeException(nameof(value), value,"Should be between minimum and maximum values for trust");
+
+            _informantsTrust[informantName] = value;
+        }
         
-        public Dictionary<string, double> InformantsTrust { private set; get; } = new();
+        public List<string> GetInformants() => _informantsTrust.Keys.ToList();
+
+
         public HashSet<NPCEchoes> Contacts { private set; get; } = new();
         private Dictionary<string, double> _lastInformantInfluence = new();
 
@@ -86,10 +107,10 @@ namespace Echoes.Runtime
                     _personality.Add(trait.traitName, trait.value);
             else dataIsComplete = false;
 
-            InformantsTrust.Clear();
+            _informantsTrust.Clear();
             if (data.trustLevels != null)
                 foreach (var trust in data.trustLevels)
-                    InformantsTrust.Add(trust.informantName, trust.level);
+                    _informantsTrust.Add(trust.informantName, trust.level);
             else dataIsComplete = false;
 
             if (!dataIsComplete)
@@ -110,9 +131,9 @@ namespace Echoes.Runtime
             foreach (var trait in npcData.Traits)
                 _personality.Add(trait.Name, trait.Intensity);
 
-            InformantsTrust.Clear();
+            _informantsTrust.Clear();
             foreach (var trust in npcData.Trusts)
-                InformantsTrust.Add(trust.Contact.name, trust.TrustLevel);
+                _informantsTrust.Add(trust.Contact.name, trust.TrustLevel);
 
             Contacts.Clear();
             foreach (var contact in npcData.Contacts)
@@ -141,15 +162,6 @@ namespace Echoes.Runtime
             if (x < min || x > max)
                 throw new ArgumentOutOfRangeException(nameof(x), x, "value must be between min and max inclusive");
             return (x - min) / (max - min) * 2 - 1;
-        }
-
-        /**
-         * @param other
-         * @return trust value of this npc towards other
-         */
-        public double TrustTowards(NPCEchoes other)
-        {
-            return InformantsTrust[other.npcData.name];
         }
 
         /**
@@ -192,9 +204,9 @@ namespace Echoes.Runtime
             double appreciationDiff = AppreciationOfPlayer() - _appreciationOfPlayerAtStartOfInteraction;
             foreach (var informant in _lastInformantInfluence.Keys.ToList())
             {
-                InformantsTrust[informant] += (appreciationDiff * _lastInformantInfluence[informant]) *
-                                              (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                                               NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue);
+                _informantsTrust[informant] += (appreciationDiff * _lastInformantInfluence[informant]) *
+                                               (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
+                                                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue);
             }
 
             foreach (var contact in Contacts)
@@ -211,15 +223,15 @@ namespace Echoes.Runtime
         protected bool ReceiveOpinion(NPCEchoes from)
         {
             if (InPlayerInteraction && !AcceptsInterferenceDuringInteraction) return false;
-            if (!InformantsTrust.ContainsKey(from.npcData.name))
-                InformantsTrust.Add(from.npcData.name,
+            if (!_informantsTrust.ContainsKey(from.npcData.name))
+                _informantsTrust.Add(from.npcData.name,
                     (NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue +
                      NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue) / 2);
 
             double startingPlayerAppreciation = AppreciationOfPlayer();
 
             //adjust current opinion
-            double trustLevel = TrustTowards(from);
+            double trustLevel = GetTrustTowards(from);
             foreach (var trait in _opinionOfPlayer.Keys.ToList())
             {
                 double average = (_opinionOfPlayer[trait] + from._opinionOfPlayer[trait]) / 2;
@@ -235,7 +247,7 @@ namespace Echoes.Runtime
         }
 
         public override string ToString() => npcData != null ? npcData.Name : "No NPC Data";
-        
+
         private Boolean IsValidTraitValue(double value)
         {
             return value <= NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue ||

@@ -37,14 +37,14 @@ namespace Echoes.Runtime.SerializableDataStructs
                 };
             }
 
-            trustLevels = new TrustLevel[npc.InformantsTrust.Count];
+            trustLevels = new TrustLevel[npc.GetInformants().Count];
             i = 0;
-            foreach (var informantName in npc.InformantsTrust.Keys)
+            foreach (var informantName in npc.GetInformants())
             {
                 trustLevels[i++] = new TrustLevel
                 {
                     informantName = informantName,
-                    level = npc.InformantsTrust[informantName]
+                    level = npc.GetTrustTowards(informantName)
                 };
             }
         }

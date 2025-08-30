@@ -63,7 +63,7 @@ namespace Tests.Play
         [Test]
         public void OpinionReception()
         {
-            npc2.InformantsTrust["npc1"] = NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue;
+            npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
             npc1.EndPlayerInteraction();
             Assert.AreEqual(
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
@@ -76,7 +76,7 @@ namespace Tests.Play
         [Test]
         public void OpinionReceptionNoTrust()
         {
-            npc2.InformantsTrust["npc1"] = NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue;
+            npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue);
             npc1.EndPlayerInteraction();
 
             Assert.AreEqual(
@@ -131,7 +131,7 @@ namespace Tests.Play
                 Assert.AreEqual(trait.value, npc.GetPersonality(trait.traitName));
 
             foreach (var trust in data.trustLevels)
-                Assert.AreEqual(trust.level, npc.InformantsTrust[trust.informantName]);
+                Assert.AreEqual(trust.level, npc.GetTrustTowards(trust.informantName));
         }
     }
 }
