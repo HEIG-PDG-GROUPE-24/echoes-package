@@ -9,18 +9,18 @@ namespace Tests.Play
 {
     public class ComponentNpcTests
     {
-        private NPCEchoes npc;
-        private NPCEchoes npc2;
+        private EchoesNpcComponent _echoesNpc;
+        private EchoesNpcComponent npc2;
         private NPCGlobalStatsGeneratorSo globalStats;
 
         [SetUp]
         public void Setup()
         {
-            npc = new GameObject().AddComponent<NPCEchoes>();
-            npc.npcData = ScriptableObject.CreateInstance<NPC>();
-            npc.npcData.Name = "TestNPCData";
+            _echoesNpc = new GameObject().AddComponent<EchoesNpcComponent>();
+            _echoesNpc.npcData = ScriptableObject.CreateInstance<NPC>();
+            _echoesNpc.npcData.Name = "TestNPCData";
 
-            npc2 = new GameObject().AddComponent<NPCEchoes>();
+            npc2 = new GameObject().AddComponent<EchoesNpcComponent>();
             npc2.npcData = ScriptableObject.CreateInstance<NPC>();
             npc2.npcData.Name = "TestNPCData2";
             
@@ -30,45 +30,45 @@ namespace Tests.Play
         [Test]
         public void ContactAddedSuccessfully()
         {
-            npc.npcData.Contacts.Clear();
-            npc.npcData.Contacts.Add(npc2);
+            _echoesNpc.npcData.Contacts.Clear();
+            _echoesNpc.npcData.Contacts.Add(npc2);
 
-            Assert.AreEqual(1, npc.npcData.Contacts.Count);
-            Assert.AreEqual("TestNPCData2", npc.npcData.Contacts[0].npcData.Name);
+            Assert.AreEqual(1, _echoesNpc.npcData.Contacts.Count);
+            Assert.AreEqual("TestNPCData2", _echoesNpc.npcData.Contacts[0].npcData.Name);
         }
 
         [Test]
         public void ContactRemovedSuccessfully()
         {
-            npc.npcData.Contacts.Add(npc2);
-            npc.npcData.Contacts.Remove(npc2);
+            _echoesNpc.npcData.Contacts.Add(npc2);
+            _echoesNpc.npcData.Contacts.Remove(npc2);
 
-            Assert.AreEqual(0, npc.npcData.Contacts.Count);
+            Assert.AreEqual(0, _echoesNpc.npcData.Contacts.Count);
         }
         
         [Test]
         public void TrustRowInitialization()
         {
-            npc.npcData.Trusts.Clear();
+            _echoesNpc.npcData.Trusts.Clear();
             var trustRow = new TrustRow
             {
                 Contact = npc2,
-                current = npc.npcData,
+                current = _echoesNpc.npcData,
                 Min = -100,
                 Max = 100,
                 TrustLevel = 0
             };
-            npc.npcData.Trusts.Add(trustRow);
+            _echoesNpc.npcData.Trusts.Add(trustRow);
 
-            Assert.AreEqual(1, npc.npcData.Trusts.Count);
-            Assert.AreEqual("TestNPCData2", npc.npcData.Trusts[0].Contact.npcData.Name);
-            Assert.AreEqual(0, npc.npcData.Trusts[0].TrustLevel);
+            Assert.AreEqual(1, _echoesNpc.npcData.Trusts.Count);
+            Assert.AreEqual("TestNPCData2", _echoesNpc.npcData.Trusts[0].Contact.npcData.Name);
+            Assert.AreEqual(0, _echoesNpc.npcData.Trusts[0].TrustLevel);
         }
         
         [Test]
         public void TraitRowInitialization()
         {
-            npc.npcData.Traits.Clear();
+            _echoesNpc.npcData.Traits.Clear();
             var traitRow = new TraitsRow
             {
                 Name = "Bravery",
@@ -76,17 +76,17 @@ namespace Tests.Play
                 Max = 100,
                 Intensity = 50
             };
-            npc.npcData.Traits.Add(traitRow);
+            _echoesNpc.npcData.Traits.Add(traitRow);
 
-            Assert.AreEqual(1, npc.npcData.Traits.Count);
-            Assert.AreEqual("Bravery", npc.npcData.Traits[0].Name);
-            Assert.AreEqual(50, npc.npcData.Traits[0].Intensity);
+            Assert.AreEqual(1, _echoesNpc.npcData.Traits.Count);
+            Assert.AreEqual("Bravery", _echoesNpc.npcData.Traits[0].Name);
+            Assert.AreEqual(50, _echoesNpc.npcData.Traits[0].Intensity);
         }
         
         [Test]
         public void OpinionRowInitialization()
         {
-            npc.npcData.Opinions.Clear();
+            _echoesNpc.npcData.Opinions.Clear();
             var opinionRow = new TraitsRow
             {
                 Name = "Trustworthiness",
@@ -94,11 +94,11 @@ namespace Tests.Play
                 Max = 100,
                 Intensity = 75
             };
-            npc.npcData.Opinions.Add(opinionRow);
+            _echoesNpc.npcData.Opinions.Add(opinionRow);
 
-            Assert.AreEqual(1, npc.npcData.Opinions.Count);
-            Assert.AreEqual("Trustworthiness", npc.npcData.Opinions[0].Name);
-            Assert.AreEqual(75, npc.npcData.Opinions[0].Intensity);
+            Assert.AreEqual(1, _echoesNpc.npcData.Opinions.Count);
+            Assert.AreEqual("Trustworthiness", _echoesNpc.npcData.Opinions[0].Name);
+            Assert.AreEqual(75, _echoesNpc.npcData.Opinions[0].Intensity);
         }
         
         [Test]
@@ -106,10 +106,10 @@ namespace Tests.Play
         {
             var globalTrait = globalStats.globalTraits.Traits[0];
 
-            npc.npcData.Traits.Clear();
-            npc.npcData.SyncWithGlobalTraits();
+            _echoesNpc.npcData.Traits.Clear();
+            _echoesNpc.npcData.SyncWithGlobalTraits();
 
-            Assert.IsTrue(npc.npcData.Traits.Exists(t => t.Name == globalTrait.Name));
+            Assert.IsTrue(_echoesNpc.npcData.Traits.Exists(t => t.Name == globalTrait.Name));
         }
         
         [Test]
@@ -118,10 +118,10 @@ namespace Tests.Play
             // Assuming NPCGlobalStatsGeneratorSo.Instance.globalTraits has at least one trait
             var globalTrait = globalStats.globalTraits.Traits[0];
 
-            npc.npcData.Opinions.Clear();
-            npc.npcData.SyncWithGlobalTraits();
+            _echoesNpc.npcData.Opinions.Clear();
+            _echoesNpc.npcData.SyncWithGlobalTraits();
 
-            Assert.IsTrue(npc.npcData.Opinions.Exists(t => t.Name == globalTrait.Name));
+            Assert.IsTrue(_echoesNpc.npcData.Opinions.Exists(t => t.Name == globalTrait.Name));
         }
         
         [Test]
@@ -129,11 +129,11 @@ namespace Tests.Play
         {
             var globalTrait = globalStats.globalTraits.Traits[0];
 
-            npc.npcData.Traits.Clear();
-            npc.npcData.Traits.Add(new TraitsRow { Name = globalTrait.Name, Intensity = 50, Min = 0, Max = 100 });
-            npc.npcData.SyncWithGlobalTraits();
+            _echoesNpc.npcData.Traits.Clear();
+            _echoesNpc.npcData.Traits.Add(new TraitsRow { Name = globalTrait.Name, Intensity = 50, Min = 0, Max = 100 });
+            _echoesNpc.npcData.SyncWithGlobalTraits();
 
-            int count = npc.npcData.Traits.FindAll(t => t.Name == globalTrait.Name).Count;
+            int count = _echoesNpc.npcData.Traits.FindAll(t => t.Name == globalTrait.Name).Count;
             Assert.AreEqual(1, count);
         }
         
@@ -142,11 +142,11 @@ namespace Tests.Play
         {
             var globalTrait = globalStats.globalTraits.Traits[0];
 
-            npc.npcData.Opinions.Clear();
-            npc.npcData.Opinions.Add(new TraitsRow { Name = globalTrait.Name, Intensity = 50, Min = 0, Max = 100 });
-            npc.npcData.SyncWithGlobalTraits();
+            _echoesNpc.npcData.Opinions.Clear();
+            _echoesNpc.npcData.Opinions.Add(new TraitsRow { Name = globalTrait.Name, Intensity = 50, Min = 0, Max = 100 });
+            _echoesNpc.npcData.SyncWithGlobalTraits();
 
-            int count = npc.npcData.Opinions.FindAll(t => t.Name == globalTrait.Name).Count;
+            int count = _echoesNpc.npcData.Opinions.FindAll(t => t.Name == globalTrait.Name).Count;
             Assert.AreEqual(1, count);
         }
         
@@ -155,7 +155,7 @@ namespace Tests.Play
         {
             var trustRow = new TrustRow
             {
-                current = npc.npcData,
+                current = _echoesNpc.npcData,
                 Min = -100,
                 Max = 100,
                 TrustLevel = 50
@@ -198,7 +198,7 @@ namespace Tests.Play
         [Test]
         public void MultipleNPCsMaintainSeparateData()
         {
-            npc.npcData.Traits.Clear();
+            _echoesNpc.npcData.Traits.Clear();
             npc2.npcData.Traits.Clear();
 
             var traitRow1 = new TraitsRow
@@ -208,7 +208,7 @@ namespace Tests.Play
                 Max = 100,
                 Intensity = 70
             };
-            npc.npcData.Traits.Add(traitRow1);
+            _echoesNpc.npcData.Traits.Add(traitRow1);
 
             var traitRow2 = new TraitsRow
             {
@@ -219,9 +219,9 @@ namespace Tests.Play
             };
             npc2.npcData.Traits.Add(traitRow2);
 
-            Assert.AreEqual(1, npc.npcData.Traits.Count);
-            Assert.AreEqual("Bravery", npc.npcData.Traits[0].Name);
-            Assert.AreEqual(70, npc.npcData.Traits[0].Intensity);
+            Assert.AreEqual(1, _echoesNpc.npcData.Traits.Count);
+            Assert.AreEqual("Bravery", _echoesNpc.npcData.Traits[0].Name);
+            Assert.AreEqual(70, _echoesNpc.npcData.Traits[0].Intensity);
 
             Assert.AreEqual(1, npc2.npcData.Traits.Count);
             Assert.AreEqual("Cautiousness", npc2.npcData.Traits[0].Name);
@@ -231,21 +231,21 @@ namespace Tests.Play
         [Test]
         public void TrustedContactCanHaveDifferentLevels()
         {
-            npc.npcData.Trusts.Clear();
+            _echoesNpc.npcData.Trusts.Clear();
             var trustRow1 = new TrustRow
             {
                 Contact = npc2,
-                current = npc.npcData,
+                current = _echoesNpc.npcData,
                 Min = -100,
                 Max = 100,
                 TrustLevel = 20
             };
-            npc.npcData.Trusts.Add(trustRow1);
+            _echoesNpc.npcData.Trusts.Add(trustRow1);
 
             npc2.npcData.Trusts.Clear();
             var trustRow2 = new TrustRow
             {
-                Contact = npc,
+                Contact = _echoesNpc,
                 current = npc2.npcData,
                 Min = -100,
                 Max = 100,
@@ -253,8 +253,8 @@ namespace Tests.Play
             };
             npc2.npcData.Trusts.Add(trustRow2);
 
-            Assert.AreEqual(1, npc.npcData.Trusts.Count);
-            Assert.AreEqual(20, npc.npcData.Trusts[0].TrustLevel);
+            Assert.AreEqual(1, _echoesNpc.npcData.Trusts.Count);
+            Assert.AreEqual(20, _echoesNpc.npcData.Trusts[0].TrustLevel);
 
             Assert.AreEqual(1, npc2.npcData.Trusts.Count);
             Assert.AreEqual(80, npc2.npcData.Trusts[0].TrustLevel);
@@ -263,7 +263,7 @@ namespace Tests.Play
         [TearDown]
         public void TearDown()
         {
-            foreach (var obj in GameObject.FindObjectsOfType<NPCEchoes>())
+            foreach (var obj in GameObject.FindObjectsOfType<EchoesNpcComponent>())
             {
                 Object.DestroyImmediate(obj.gameObject);
             }

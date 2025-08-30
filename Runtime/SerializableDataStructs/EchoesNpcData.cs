@@ -13,38 +13,38 @@ namespace Echoes.Runtime.SerializableDataStructs
 
         public TrustLevel[] trustLevels;
 
-        public EchoesNpcData(NPCEchoes npc)
+        public EchoesNpcData(EchoesNpcComponent echoesNpc)
         {
-            opinionOfPlayer = new TraitValue[npc.GetPlayerOpinionTraits().Count];
+            opinionOfPlayer = new TraitValue[echoesNpc.GetPlayerOpinionTraits().Count];
             int i = 0;
-            foreach (var trait in npc.GetPlayerOpinionTraits())
+            foreach (var trait in echoesNpc.GetPlayerOpinionTraits())
             {
                 opinionOfPlayer[i++] = new TraitValue
                 {
                     traitName = trait,
-                    value = npc.GetOpinionOfPlayer(trait)
+                    value = echoesNpc.GetOpinionOfPlayer(trait)
                 };
             }
 
-            npcPersonality = new TraitValue[npc.GetPersonalityTraits().Count];
+            npcPersonality = new TraitValue[echoesNpc.GetPersonalityTraits().Count];
             i = 0;
-            foreach (var trait in npc.GetPersonalityTraits())
+            foreach (var trait in echoesNpc.GetPersonalityTraits())
             {
                 npcPersonality[i++] = new TraitValue
                 {
                     traitName = trait,
-                    value = npc.GetPersonality(trait)
+                    value = echoesNpc.GetPersonality(trait)
                 };
             }
 
-            trustLevels = new TrustLevel[npc.GetInformants().Count];
+            trustLevels = new TrustLevel[echoesNpc.GetInformants().Count];
             i = 0;
-            foreach (var informantName in npc.GetInformants())
+            foreach (var informantName in echoesNpc.GetInformants())
             {
                 trustLevels[i++] = new TrustLevel
                 {
                     informantName = informantName,
-                    level = npc.GetTrustTowards(informantName)
+                    level = echoesNpc.GetTrustTowards(informantName)
                 };
             }
         }

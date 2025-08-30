@@ -11,8 +11,8 @@ namespace Tests.Play
     {
         private GameObject goNpc1;
         private GameObject goNpc2;
-        private NPCEchoes npc1;
-        private NPCEchoes npc2;
+        private EchoesNpcComponent npc1;
+        private EchoesNpcComponent npc2;
 
         [SetUp]
         public void SetUp()
@@ -20,8 +20,8 @@ namespace Tests.Play
             goNpc1 = new GameObject();
             goNpc2 = new GameObject();
 
-            npc1 = goNpc1.AddComponent<NPCEchoes>();
-            npc2 = goNpc2.AddComponent<NPCEchoes>();
+            npc1 = goNpc1.AddComponent<EchoesNpcComponent>();
+            npc2 = goNpc2.AddComponent<EchoesNpcComponent>();
 
             npc1.npcData = ScriptableObject.CreateInstance<NPC>();
             npc2.npcData = ScriptableObject.CreateInstance<NPC>();
@@ -109,29 +109,29 @@ namespace Tests.Play
         [Test]
         public void DataToObject()
         {
-            EchoesNpcData npcData = new EchoesNpcData(new NPCEchoes());
-            NPCEchoes npcObject = new NPCEchoes();
+            EchoesNpcData npcData = new EchoesNpcData(new EchoesNpcComponent());
+            EchoesNpcComponent echoesNpcObject = new EchoesNpcComponent();
 
             npcData.npcPersonality = new TraitValue[1];
             npcData.npcPersonality[0] = new TraitValue();
             npcData.npcPersonality[0].traitName = "Trait";
             npcData.npcPersonality[0].value = 5;
 
-            npcObject.LoadFromData(npcData);
+            echoesNpcObject.LoadFromData(npcData);
 
-            AssertEqual(npcData, npcObject);
+            AssertEqual(npcData, echoesNpcObject);
         }
 
-        private void AssertEqual(EchoesNpcData data, NPCEchoes npc)
+        private void AssertEqual(EchoesNpcData data, EchoesNpcComponent echoesNpc)
         {
             foreach (var trait in data.opinionOfPlayer)
-                Assert.AreEqual(trait.value, npc.GetOpinionOfPlayer(trait.traitName));
+                Assert.AreEqual(trait.value, echoesNpc.GetOpinionOfPlayer(trait.traitName));
 
             foreach (var trait in data.npcPersonality)
-                Assert.AreEqual(trait.value, npc.GetPersonality(trait.traitName));
+                Assert.AreEqual(trait.value, echoesNpc.GetPersonality(trait.traitName));
 
             foreach (var trust in data.trustLevels)
-                Assert.AreEqual(trust.level, npc.GetTrustTowards(trust.informantName));
+                Assert.AreEqual(trust.level, echoesNpc.GetTrustTowards(trust.informantName));
         }
     }
 }

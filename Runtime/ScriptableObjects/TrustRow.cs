@@ -14,7 +14,7 @@ namespace Echoes.Runtime
         public float Max { get; set; }
 
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
-        public NPCEchoes Contact = new();
+        public EchoesNpcComponent Contact = new();
 
 
         [PropertyRange("Min", "Max")] public int TrustLevel;
@@ -27,7 +27,7 @@ namespace Echoes.Runtime
 
         private IEnumerable GetAllNPCs()
         {
-            List<NPCEchoes> npcs = EchoesGlobal.GetAllNPCs();
+            List<EchoesNpcComponent> npcs = EchoesGlobal.GetAllNPCs();
             npcs.RemoveAll(npc => npc.npcData.Name == current.Name);
             return npcs;
         }

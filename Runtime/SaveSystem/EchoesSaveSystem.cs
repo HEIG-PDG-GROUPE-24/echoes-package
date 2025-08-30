@@ -23,7 +23,7 @@ namespace Echoes.Runtime.SaveSystem
 
         public void Save()
         {
-            NPCEchoes[] echoesNpcsGo = Object.FindObjectsByType<NPCEchoes>(FindObjectsSortMode.None); // find all npcs
+            EchoesNpcComponent[] echoesNpcsGo = Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None); // find all npcs
 
             NpcData.data = new EchoesNpcData[echoesNpcsGo.Length];
             for (int i = 0; i < echoesNpcsGo.Length; i++)
@@ -38,7 +38,7 @@ namespace Echoes.Runtime.SaveSystem
         {
             Read(); // read implementation in children
 
-            NPCEchoes[] echoesNpcsGo = Object.FindObjectsByType<NPCEchoes>(FindObjectsSortMode.None); // find all npcs
+            EchoesNpcComponent[] echoesNpcsGo = Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None); // find all npcs
 
             var npcByname = echoesNpcsGo.ToDictionary(npc => npc.name);
 

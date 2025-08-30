@@ -10,7 +10,11 @@ using UnityEngine;
 
 namespace Echoes.Runtime
 {
-    public class NPCEchoes : MonoBehaviour
+    /**
+     * This is the main component that should be attached to NPC game objects
+     * Each NPC has its own Scriptable Object file storing its contacts and other starting values
+     */
+    public class EchoesNpcComponent : MonoBehaviour
     {
         [InlineEditor] public NPC npcData;
 
@@ -22,6 +26,11 @@ namespace Echoes.Runtime
          */
         public double GetOpinionOfPlayer(string traitName) => _opinionOfPlayer[traitName];
 
+        /**
+         * @param traitName name of the trait to change opinion on
+         * @param opinion new value for the trait
+         * @throws ArgumentOutOfRangeException if opinion isn't in the globally defined correct range
+         */
         public void SetOpinionOfPlayer(string traitName, double opinion)
         {
             if (!IsValidTraitValue(opinion))
@@ -31,23 +40,32 @@ namespace Echoes.Runtime
             _opinionOfPlayer[traitName] = opinion;
         }
 
-        public void AddToOpinionOfPlayer(string traitName, double value)
-        {
-            value += _opinionOfPlayer[traitName];
+        /**
+         * @param traitName name of the trait to change opinion on
+         * @param value value to add to the current opinion
+         * @throws ArgumentOutOfRangeException if opinion isn't in the globally defined correct range
+         */
+        public void AddToOpinionOfPlayer(string traitName, double value) =>
+            SetOpinionOfPlayer(traitName, value + _opinionOfPlayer[traitName]);
 
-            if (!IsValidTraitValue(value))
-                throw new ArgumentOutOfRangeException(nameof(value), value,
-                    "Should be between minimum and maximum inclusive values for traits");
-
-            _opinionOfPlayer[traitName] = value;
-        }
-
+        /**
+         * Allows tests get all keys, since they may not be globally defined
+         */
         internal List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
 
         private Dictionary<string, double> _personality = new();
 
+        /**
+         * @param traitName name of the trait to fetch value for
+         * @return value corresponding to this trait
+         */
         public double GetPersonality(string traitName) => _personality[traitName];
 
+        /**
+         * @param traitName name of the trait to change opinion on
+         * @param opinion new value for the trait
+         * @throws ArgumentOutOfRangeException if opinion isn't in the globally defined correct range
+         */
         public void SetPersonality(string traitName, double value)
         {
             if (!IsValidTraitValue(value))
@@ -56,6 +74,9 @@ namespace Echoes.Runtime
             _personality[traitName] = value;
         }
 
+        /**
+         * Allows tests get all keys, since they may not be globally defined
+         */
         internal List<string> GetPersonalityTraits() => _personality.Keys.ToList();
 
         private Dictionary<string, double> _informantsTrust = new();
@@ -64,29 +85,33 @@ namespace Echoes.Runtime
          * @param other
          * @return trust value of this npc towards other
          */
-        public double GetTrustTowards(NPCEchoes other) => _informantsTrust[other.npcData.name];
+        public double GetTrustTowards(EchoesNpcComponent other) => _informantsTrust[other.npcData.name];
+
         public double GetTrustTowards(string informantName) => _informantsTrust[informantName];
 
-        public void SetTrustTowards(NPCEchoes other, double value) => SetTrustTowards(other.npcData.name, value);
+        public void SetTrustTowards(EchoesNpcComponent other, double value) => SetTrustTowards(other.npcData.name, value);
+
         public void SetTrustTowards(string informantName, double value)
         {
             if (value < NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue ||
                 value > NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue
-               ) throw new ArgumentOutOfRangeException(nameof(value), value,"Should be between minimum and maximum values for trust");
+               )
+                throw new ArgumentOutOfRangeException(nameof(value), value,
+                    "Should be between minimum and maximum values for trust");
 
             _informantsTrust[informantName] = value;
         }
-        
+
         public List<string> GetInformants() => _informantsTrust.Keys.ToList();
 
 
-        private HashSet<NPCEchoes> _contacts = new();
-        internal void AddContact(NPCEchoes contact)=>_contacts.Add(contact);
-        
+        private HashSet<EchoesNpcComponent> _contacts = new();
+        internal void AddContact(EchoesNpcComponent contact) => _contacts.Add(contact);
+
         private Dictionary<string, double> _lastInformantInfluence = new();
 
-        public bool InPlayerInteraction { private set; get; } = false;
-        public bool AcceptsInterferenceDuringInteraction { private set; get; } = false;
+        public bool InPlayerInteraction { private set; get; }
+        public bool AcceptsInterferenceDuringInteraction { private set; get; }
         private double _appreciationOfPlayerAtStartOfInteraction;
 
         /**
@@ -222,10 +247,11 @@ namespace Echoes.Runtime
 
         /**
          * Combines this npc's current opinion of the player with the other's based on the trust value toward that informant.
+         * It also records how receiving that opinion impacted player appreciation
          * @param from npc giving their opinion
          * @return whether the npc received the opinion.
          */
-        protected bool ReceiveOpinion(NPCEchoes from)
+        public bool ReceiveOpinion(EchoesNpcComponent from)
         {
             if (InPlayerInteraction && !AcceptsInterferenceDuringInteraction) return false;
             if (!_informantsTrust.ContainsKey(from.npcData.name))
