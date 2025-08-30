@@ -263,7 +263,7 @@ namespace Tests.Play
         [TearDown]
         public void TearDown()
         {
-            foreach (var obj in GameObject.FindObjectsOfType<EchoesNpcComponent>())
+            foreach (var obj in Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None))
             {
                 Object.DestroyImmediate(obj.gameObject);
             }
