@@ -1,58 +1,57 @@
-using System;
 using Echoes.Runtime.SerializableDataStructs;
 using Echoes.Runtime;
 using NUnit.Framework;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 namespace Tests.Play
 {
     public class NpcBehaviourTest
     {
-        private GameObject goNpc1;
-        private GameObject goNpc2;
-        private EchoesNpcComponent npc1;
-        private EchoesNpcComponent npc2;
+        private GameObject _goNpc1;
+        private GameObject _goNpc2;
+        private EchoesNpcComponent _npc1;
+        private EchoesNpcComponent _npc2;
+        private const double Precision = 0.0001; 
 
         [SetUp]
         public void SetUp()
         {
-            goNpc1 = new GameObject();
-            goNpc2 = new GameObject();
+            _goNpc1 = new GameObject();
+            _goNpc2 = new GameObject();
 
-            npc1 = goNpc1.AddComponent<EchoesNpcComponent>();
-            npc2 = goNpc2.AddComponent<EchoesNpcComponent>();
+            _npc1 = _goNpc1.AddComponent<EchoesNpcComponent>();
+            _npc2 = _goNpc2.AddComponent<EchoesNpcComponent>();
 
-            npc1.npcData = ScriptableObject.CreateInstance<NPC>();
-            npc2.npcData = ScriptableObject.CreateInstance<NPC>();
+            _npc1.npcData = ScriptableObject.CreateInstance<NPC>();
+            _npc2.npcData = ScriptableObject.CreateInstance<NPC>();
 
-            npc1.npcData.name = "npc1";
-            npc2.npcData.name = "npc2";
+            _npc1.npcData.name = "npc1";
+            _npc2.npcData.name = "npc2";
 
-            npc1.SetPersonality("test",
+            _npc1.SetPersonality("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
             );
-            npc2.SetPersonality("test",
+            _npc2.SetPersonality("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
             );
 
-            npc1.SetOpinionOfPlayer("test",
+            _npc1.SetOpinionOfPlayer("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.3 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
             );
-            npc2.SetOpinionOfPlayer("test",
+            _npc2.SetOpinionOfPlayer("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
             );
-            
-            npc1.AddContact(npc2);
-            npc2.AddContact(npc1);
+
+            _npc1.AddContact(_npc2);
+            _npc2.AddContact(_npc1);
         }
 
         [TearDown]
@@ -63,59 +62,118 @@ namespace Tests.Play
         [Test]
         public void OpinionReception()
         {
-            npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
-            npc1.EndPlayerInteraction();
+            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
+            _npc1.EndPlayerInteraction();
             Assert.AreEqual(
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
-                npc2.GetOpinionOfPlayer("test"), 0.0001
+                _npc2.GetOpinionOfPlayer("test"), Precision
             );
         }
 
         [Test]
         public void OpinionReceptionNoTrust()
         {
-            npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue);
-            npc1.EndPlayerInteraction();
+            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue);
+            _npc1.EndPlayerInteraction();
 
             Assert.AreEqual(
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
-                npc2.GetOpinionOfPlayer("test"), 0.0001
+                _npc2.GetOpinionOfPlayer("test"), Precision
             );
         }
 
         [Test]
         public void PlayerScore1()
         {
-            Assert.AreEqual(npc1.AppreciationOfPlayer(), 0.6, 0.0001);
+            Assert.AreEqual(_npc1.AppreciationOfPlayer(), 0.6, Precision);
         }
 
         [Test]
         public void PlayerScore2()
         {
-            Assert.AreEqual(npc2.AppreciationOfPlayer(), 1, 0.0001);
+            Assert.AreEqual(_npc2.AppreciationOfPlayer(), 1, Precision);
+        }
+
+        [Test]
+        public void InteractionState()
+        {
+            Assert.False(_npc1.InPlayerInteraction);
+
+            _npc1.StartPlayerInteraction();
+            Assert.True(_npc1.InPlayerInteraction);
+
+            _npc1.EndPlayerInteraction();
+            Assert.False(_npc2.InPlayerInteraction);
+        }
+
+        [Test]
+        public void InteractionRefuseOpinion()
+        {
+            _npc1.StartPlayerInteraction();
+            Assert.False(_npc1.ReceiveOpinion(_npc2));
+        }
+
+        [Test]
+        public void AdjustingTrust()
+        {
+            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
+
+            // npc1 has an interaction with player and transmits their opinion to npc2
+            Debug.LogFormat("{0} player score before receiving opinion : {1}", nameof(_npc2),
+                _npc2.AppreciationOfPlayer());
+            _npc1.EndPlayerInteraction();
+            Debug.LogFormat("{0} player score after receiving opinion : {1}", nameof(_npc2),
+                _npc2.AppreciationOfPlayer());
+
+            // npc2 has an interaction with the player that modifies it's opinion
+            Debug.LogFormat("{0} trust towards {1} before interaction : {2}", nameof(_npc2), nameof(_npc1),
+                _npc2.GetTrustTowards(_npc1));
+            Debug.LogFormat("{0} player score before interaction : {1}", nameof(_npc2), _npc2.AppreciationOfPlayer());
+            _npc2.StartPlayerInteraction();
+            _npc2.AddToOpinionOfPlayer("test",
+                0.2 * (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
+                       NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue)
+            );
+            _npc2.EndPlayerInteraction();
+
+            // verify npc2 adjusted their trust towards npc1 accordingly
+            Debug.LogFormat("{0} player score after interaction : {1}", nameof(_npc2), _npc2.AppreciationOfPlayer());
+            Debug.LogFormat("{0} trust towards {1} after interaction : {2}", nameof(_npc2), nameof(_npc1),
+                _npc2.GetTrustTowards(_npc1)
+            );
+
+            Assert.AreEqual(
+                NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue +
+                (NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue -
+                 NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue) * (-0.4 * +0.4),
+                _npc2.GetTrustTowards(_npc1),
+                Precision
+            );
         }
 
         [Test]
         public void ObjectToData()
         {
-            EchoesNpcData npcData = new EchoesNpcData(npc1);
-            AssertEqual(npcData, npc1);
+            EchoesNpcData npcData = new EchoesNpcData(_npc1);
+            AssertEqual(npcData, _npc1);
         }
 
         [Test]
         public void DataToObject()
         {
-            EchoesNpcData npcData = new EchoesNpcData(new EchoesNpcComponent());
-            EchoesNpcComponent echoesNpcObject = new EchoesNpcComponent();
+            EchoesNpcData npcData = new EchoesNpcData(new GameObject().AddComponent<EchoesNpcComponent>());
+            EchoesNpcComponent echoesNpcObject = new GameObject().AddComponent<EchoesNpcComponent>();
 
             npcData.npcPersonality = new TraitValue[1];
-            npcData.npcPersonality[0] = new TraitValue();
-            npcData.npcPersonality[0].traitName = "Trait";
-            npcData.npcPersonality[0].value = 5;
+            npcData.npcPersonality[0] = new TraitValue
+            {
+                traitName = "Trait",
+                value = 5
+            };
 
             echoesNpcObject.LoadFromData(npcData);
 
