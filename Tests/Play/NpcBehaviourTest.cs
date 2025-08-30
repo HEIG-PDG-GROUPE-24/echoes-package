@@ -50,9 +50,9 @@ namespace Tests.Play
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
             );
-
-            npc1.Contacts.Add(npc2);
-            npc2.Contacts.Add(npc1);
+            
+            npc1.AddContact(npc2);
+            npc2.AddContact(npc1);
         }
 
         [TearDown]

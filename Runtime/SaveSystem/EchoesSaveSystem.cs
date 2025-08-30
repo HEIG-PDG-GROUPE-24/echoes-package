@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using Echoes.Runtime.SerializableDataStructs;
 
-[assembly: InternalsVisibleTo("Assembly-CSharp")] // default unity assembly, used for tests
+[assembly: InternalsVisibleTo("PlaymodeTests")]
 
 namespace Echoes.Runtime.SaveSystem
 {

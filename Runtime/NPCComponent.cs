@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Echoes.Runtime.SerializableDataStructs;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
+[assembly: InternalsVisibleTo("playmodeTests")]
 
 namespace Echoes.Runtime
 {
@@ -39,7 +42,7 @@ namespace Echoes.Runtime
             _opinionOfPlayer[traitName] = value;
         }
 
-        public List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
+        internal List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
 
         private Dictionary<string, double> _personality = new();
 
@@ -53,7 +56,7 @@ namespace Echoes.Runtime
             _personality[traitName] = value;
         }
 
-        public List<string> GetPersonalityTraits() => _personality.Keys.ToList();
+        internal List<string> GetPersonalityTraits() => _personality.Keys.ToList();
 
         private Dictionary<string, double> _informantsTrust = new();
 
@@ -77,7 +80,9 @@ namespace Echoes.Runtime
         public List<string> GetInformants() => _informantsTrust.Keys.ToList();
 
 
-        public HashSet<NPCEchoes> Contacts { private set; get; } = new();
+        private HashSet<NPCEchoes> _contacts = new();
+        internal void AddContact(NPCEchoes contact)=>_contacts.Add(contact);
+        
         private Dictionary<string, double> _lastInformantInfluence = new();
 
         public bool InPlayerInteraction { private set; get; } = false;
@@ -135,10 +140,10 @@ namespace Echoes.Runtime
             foreach (var trust in npcData.Trusts)
                 _informantsTrust.Add(trust.Contact.name, trust.TrustLevel);
 
-            Contacts.Clear();
+            _contacts.Clear();
             foreach (var contact in npcData.Contacts)
             {
-                Contacts.Add(contact);
+                _contacts.Add(contact);
             }
 
             _lastInformantInfluence.Clear();
@@ -146,7 +151,7 @@ namespace Echoes.Runtime
             foreach (var group in NPCGlobalStatsGeneratorSo.Instance.globalGroupes.Groupes.Where(group =>
                          group.Members.Contains(this)))
             {
-                foreach (var member in group.Members.Where(member => member != this)) Contacts.Add(member);
+                foreach (var member in group.Members.Where(member => member != this)) _contacts.Add(member);
             }
         }
 
@@ -209,7 +214,7 @@ namespace Echoes.Runtime
                                                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue);
             }
 
-            foreach (var contact in Contacts)
+            foreach (var contact in _contacts)
             {
                 contact.ReceiveOpinion(this);
             }
