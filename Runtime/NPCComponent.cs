@@ -17,10 +17,7 @@ namespace Echoes.Runtime
          * @param traitName name of the trait to fetch value for
          * @return value corresponding to this trait
          */
-        public double GetOpinionOfPlayer(string traitName)
-        {
-            return _opinionOfPlayer[traitName];
-        }
+        public double GetOpinionOfPlayer(string traitName) => _opinionOfPlayer[traitName];
 
         public void SetOpinionOfPlayer(string traitName, double opinion)
         {
@@ -42,12 +39,22 @@ namespace Echoes.Runtime
             _opinionOfPlayer[traitName] = value;
         }
 
-        public List<string> GetPlayerOpinionTraits()
-        {
-            return _opinionOfPlayer.Keys.ToList();
-        }
+        public List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
 
-        public Dictionary<string, double> Personality { private set; get; } = new();
+        private Dictionary<string, double> _personality = new();
+
+        public double GetPersonality(string traitName) => _personality[traitName];
+
+        public void SetPersonality(string traitName, double value)
+        {
+            if (!IsValidTraitValue(value))
+                throw new ArgumentOutOfRangeException(nameof(value), value,
+                    "Should be between minimum and maximum values for traits");
+            _personality[traitName] = value;
+        }
+        
+        public List<string> GetPersonalityTraits() => _personality.Keys.ToList();
+        
         public Dictionary<string, double> InformantsTrust { private set; get; } = new();
         public HashSet<NPCEchoes> Contacts { private set; get; } = new();
         private Dictionary<string, double> _lastInformantInfluence = new();
@@ -73,10 +80,10 @@ namespace Echoes.Runtime
                     _opinionOfPlayer.Add(trait.traitName, trait.value);
             else dataIsComplete = false;
 
-            Personality.Clear();
+            _personality.Clear();
             if (data.npcPersonality != null)
                 foreach (var trait in data.npcPersonality)
-                    Personality.Add(trait.traitName, trait.value);
+                    _personality.Add(trait.traitName, trait.value);
             else dataIsComplete = false;
 
             InformantsTrust.Clear();
@@ -99,9 +106,9 @@ namespace Echoes.Runtime
             foreach (var trait in npcData.Opinions)
                 _opinionOfPlayer.Add(trait.Name, trait.Intensity);
 
-            Personality.Clear();
+            _personality.Clear();
             foreach (var trait in npcData.Traits)
-                Personality.Add(trait.Name, trait.Intensity);
+                _personality.Add(trait.Name, trait.Intensity);
 
             InformantsTrust.Clear();
             foreach (var trust in npcData.Trusts)
@@ -151,12 +158,12 @@ namespace Echoes.Runtime
         public double AppreciationOfPlayer()
         {
             double score = 0;
-            foreach (var trait in Personality.Keys)
+            foreach (var trait in _personality.Keys)
             {
                 double maxDiff = NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-                double diff = Math.Abs(_opinionOfPlayer[trait] - Personality[trait]);
-                score -= Normalize(diff, 0, maxDiff) / Personality.Count;
+                double diff = Math.Abs(_opinionOfPlayer[trait] - _personality[trait]);
+                score -= Normalize(diff, 0, maxDiff) / _personality.Count;
             }
 
             return score;

@@ -29,14 +29,16 @@ namespace Tests.Play
             npc1.npcData.name = "npc1";
             npc2.npcData.name = "npc2";
 
-            npc1.Personality["test"] =
+            npc1.SetPersonality("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-            npc2.Personality["test"] =
+                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+            );
+            npc2.SetPersonality("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
                  NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+            );
 
             npc1.SetOpinionOfPlayer("test",
                 (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
@@ -126,7 +128,7 @@ namespace Tests.Play
                 Assert.AreEqual(trait.value, npc.GetOpinionOfPlayer(trait.traitName));
 
             foreach (var trait in data.npcPersonality)
-                Assert.AreEqual(trait.value, npc.Personality[trait.traitName]);
+                Assert.AreEqual(trait.value, npc.GetPersonality(trait.traitName));
 
             foreach (var trust in data.trustLevels)
                 Assert.AreEqual(trust.level, npc.InformantsTrust[trust.informantName]);

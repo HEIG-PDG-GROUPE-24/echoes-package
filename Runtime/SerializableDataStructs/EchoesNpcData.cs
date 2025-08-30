@@ -26,14 +26,14 @@ namespace Echoes.Runtime.SerializableDataStructs
                 };
             }
 
-            npcPersonality = new TraitValue[npc.Personality.Count];
+            npcPersonality = new TraitValue[npc.GetPersonalityTraits().Count];
             i = 0;
-            foreach (var trait in npc.Personality.Keys)
+            foreach (var trait in npc.GetPersonalityTraits())
             {
                 npcPersonality[i++] = new TraitValue
                 {
                     traitName = trait,
-                    value = npc.Personality[trait]
+                    value = npc.GetPersonality(trait)
                 };
             }
 
