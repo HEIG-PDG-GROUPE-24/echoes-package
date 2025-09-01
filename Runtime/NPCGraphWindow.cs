@@ -2,7 +2,7 @@ using Echoes.Runtime;
 using UnityEditor;
 using UnityEngine;
 
-namespace Echoes
+namespace Echoes.Runtime
 {
     using UnityEditor;
     using UnityEngine;
@@ -12,8 +12,8 @@ namespace Echoes
     {
         public class NPCGraphWindow : EditorWindow
         {
-            private List<NPCEchoes> allNPCs;
-            private Dictionary<NPCEchoes, Rect> nodePositions;
+            private List<EchoesNpcComponent> allNPCs;
+            private Dictionary<EchoesNpcComponent, Rect> nodePositions;
             private GUIStyle nodeStyle;
 
             [MenuItem("Window/Echoes/NPC Graph")]
@@ -35,7 +35,7 @@ namespace Echoes
             {
                 // Find all NPC assets in the project
                 allNPCs = EchoesGlobal.GetAllNPCs();
-                nodePositions = new Dictionary<NPCEchoes, Rect>();
+                nodePositions = new Dictionary<EchoesNpcComponent, Rect>();
 
                 Vector2 center = new Vector2(500, 300); // where the "circle" is centered
                 float radius = 200f; // distance from center
@@ -76,7 +76,7 @@ namespace Echoes
                 
                 foreach (var kvp in nodePositions)
                 {
-                    NPCEchoes npc = kvp.Key;
+                    EchoesNpcComponent npc = kvp.Key;
                     Rect rect = kvp.Value;
                     GUI.Box(rect, npc.name, nodeStyle);
                 }

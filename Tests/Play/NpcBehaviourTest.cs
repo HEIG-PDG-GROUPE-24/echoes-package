@@ -1,5 +1,6 @@
 using Echoes.Runtime.SerializableDataStructs;
 using Echoes.Runtime;
+using Echoes.Runtime.ScriptableObjects;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -29,25 +30,25 @@ namespace Tests.Play
             _npc2.npcData.name = "npc2";
 
             _npc1.SetPersonality("test",
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.5 +
+                GlobalStats.Instance.globalTraits.minValue
             );
             _npc2.SetPersonality("test",
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.7 +
+                GlobalStats.Instance.globalTraits.minValue
             );
 
             _npc1.SetOpinionOfPlayer("test",
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.3 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.3 +
+                GlobalStats.Instance.globalTraits.minValue
             );
             _npc2.SetOpinionOfPlayer("test",
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.7 +
+                GlobalStats.Instance.globalTraits.minValue
             );
 
             _npc1.AddContact(_npc2);
@@ -62,12 +63,12 @@ namespace Tests.Play
         [Test]
         public void OpinionReception()
         {
-            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
+            _npc2.SetTrustTowards("npc1", GlobalStats.Instance.globalTrust.maxValue);
             _npc1.EndPlayerInteraction();
             Assert.AreEqual(
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.5 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.5 +
+                GlobalStats.Instance.globalTraits.minValue,
                 _npc2.GetOpinionOfPlayer("test"), Precision
             );
         }
@@ -75,13 +76,13 @@ namespace Tests.Play
         [Test]
         public void OpinionReceptionNoTrust()
         {
-            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue);
+            _npc2.SetTrustTowards("npc1", GlobalStats.Instance.globalTrust.minValue);
             _npc1.EndPlayerInteraction();
 
             Assert.AreEqual(
-                (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue) * 0.7 +
-                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
+                (GlobalStats.Instance.globalTraits.maxValue -
+                 GlobalStats.Instance.globalTraits.minValue) * 0.7 +
+                GlobalStats.Instance.globalTraits.minValue,
                 _npc2.GetOpinionOfPlayer("test"), Precision
             );
         }
@@ -120,7 +121,7 @@ namespace Tests.Play
         [Test]
         public void AdjustingTrust()
         {
-            _npc2.SetTrustTowards("npc1", NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue);
+            _npc2.SetTrustTowards("npc1", GlobalStats.Instance.globalTrust.maxValue);
 
             // npc1 has an interaction with player and transmits their opinion to npc2
             Debug.LogFormat("{0} player score before receiving opinion : {1}", nameof(_npc2),
@@ -135,8 +136,8 @@ namespace Tests.Play
             Debug.LogFormat("{0} player score before interaction : {1}", nameof(_npc2), _npc2.AppreciationOfPlayer());
             _npc2.StartPlayerInteraction();
             _npc2.AddToOpinionOfPlayer("test",
-                0.2 * (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                       NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue)
+                0.2 * (GlobalStats.Instance.globalTraits.maxValue -
+                       GlobalStats.Instance.globalTraits.minValue)
             );
             _npc2.EndPlayerInteraction();
 
@@ -147,9 +148,9 @@ namespace Tests.Play
             );
 
             Assert.AreEqual(
-                NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue +
-                (NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue -
-                 NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue) * (-0.4 * +0.4),
+                GlobalStats.Instance.globalTrust.maxValue +
+                (GlobalStats.Instance.globalTrust.maxValue -
+                 GlobalStats.Instance.globalTrust.minValue) * (-0.4 * +0.4),
                 _npc2.GetTrustTowards(_npc1),
                 Precision
             );

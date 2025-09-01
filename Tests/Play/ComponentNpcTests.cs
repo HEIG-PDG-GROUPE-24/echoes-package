@@ -1,9 +1,7 @@
 using Echoes.Runtime;
+using Echoes.Runtime.ScriptableObjects;
 using NUnit.Framework;
 using UnityEngine;
-using Echoes.Runtime.SerializableDataStructs;
-using Echoes.Runtime.SaveSystem;
-using Echoes.Runtime.ScriptableObjects;
 
 namespace Tests.Play
 {
@@ -11,7 +9,7 @@ namespace Tests.Play
     {
         private EchoesNpcComponent _echoesNpc;
         private EchoesNpcComponent npc2;
-        private NPCGlobalStatsGeneratorSo globalStats;
+        private GlobalStats globalStats;
 
         [SetUp]
         public void Setup()
@@ -24,7 +22,7 @@ namespace Tests.Play
             npc2.npcData = ScriptableObject.CreateInstance<NPC>();
             npc2.npcData.Name = "TestNPCData2";
             
-            globalStats = NPCGlobalStatsGeneratorSo.Instance;
+            globalStats = GlobalStats.Instance;
         }
 
         [Test]
@@ -115,7 +113,7 @@ namespace Tests.Play
         [Test]
         public void SyncWithGlobalTraitsAddsMissingOpinions()
         {
-            // Assuming NPCGlobalStatsGeneratorSo.Instance.globalTraits has at least one trait
+            // Assuming GlobalStats.Instance.globalTraits has at least one trait
             var globalTrait = globalStats.globalTraits.Traits[0];
 
             _echoesNpc.npcData.Opinions.Clear();

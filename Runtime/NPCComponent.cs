@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Echoes.Runtime.ScriptableObjects;
 using Echoes.Runtime.SerializableDataStructs;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -93,8 +94,8 @@ namespace Echoes.Runtime
 
         public void SetTrustTowards(string informantName, double value)
         {
-            if (value < NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue ||
-                value > NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue
+            if (value < GlobalStats.Instance.globalTrust.minValue ||
+                value > GlobalStats.Instance.globalTrust.maxValue
                )
                 throw new ArgumentOutOfRangeException(nameof(value), value,
                     "Should be between minimum and maximum values for trust");
@@ -173,7 +174,7 @@ namespace Echoes.Runtime
 
             _lastInformantInfluence.Clear();
 
-            foreach (var group in NPCGlobalStatsGeneratorSo.Instance.globalGroupes.Groupes.Where(group =>
+            foreach (var group in GlobalStats.Instance.globalGroups.Groups.Where(group =>
                          group.Members.Contains(this)))
             {
                 foreach (var member in group.Members.Where(member => member != this)) _contacts.Add(member);
@@ -202,8 +203,8 @@ namespace Echoes.Runtime
             double score = 0;
             foreach (var trait in _personality.Keys)
             {
-                double maxDiff = NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                                 NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+                double maxDiff = GlobalStats.Instance.globalTraits.maxValue -
+                                 GlobalStats.Instance.globalTraits.minValue;
                 double diff = Math.Abs(_opinionOfPlayer[trait] - _personality[trait]);
                 score -= Normalize(diff, 0, maxDiff) / _personality.Count;
             }
@@ -235,8 +236,8 @@ namespace Echoes.Runtime
             foreach (var informant in _lastInformantInfluence.Keys.ToList())
             {
                 _informantsTrust[informant] += (appreciationDiff * _lastInformantInfluence[informant]) *
-                                               (NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue -
-                                                NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue);
+                                               (GlobalStats.Instance.globalTraits.maxValue -
+                                                GlobalStats.Instance.globalTraits.minValue);
             }
 
             foreach (var contact in _contacts)
@@ -256,8 +257,8 @@ namespace Echoes.Runtime
             if (InPlayerInteraction && !AcceptsInterferenceDuringInteraction) return false;
             if (!_informantsTrust.ContainsKey(from.npcData.name))
                 _informantsTrust.Add(from.npcData.name,
-                    (NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue +
-                     NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue) / 2);
+                    (GlobalStats.Instance.globalTraits.minValue +
+                     GlobalStats.Instance.globalTraits.maxValue) / 2);
 
             double startingPlayerAppreciation = AppreciationOfPlayer();
 
@@ -268,8 +269,8 @@ namespace Echoes.Runtime
                 double average = (_opinionOfPlayer[trait] + from._opinionOfPlayer[trait]) / 2;
                 double diff = average - _opinionOfPlayer[trait];
                 _opinionOfPlayer[trait] += diff * ((Normalize(trustLevel,
-                    NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue,
-                    NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue) + 1) / 2);
+                    GlobalStats.Instance.globalTraits.minValue,
+                    GlobalStats.Instance.globalTraits.maxValue) + 1) / 2);
             }
 
             _lastInformantInfluence[from.npcData.name] = AppreciationOfPlayer() - startingPlayerAppreciation;
@@ -281,8 +282,8 @@ namespace Echoes.Runtime
 
         private Boolean IsValidTraitValue(double value)
         {
-            return value <= NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue ||
-                   value >= NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+            return value <= GlobalStats.Instance.globalTraits.maxValue ||
+                   value >= GlobalStats.Instance.globalTraits.minValue;
         }
     }
 }

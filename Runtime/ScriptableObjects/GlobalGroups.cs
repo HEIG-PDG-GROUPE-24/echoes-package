@@ -2,29 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
-namespace Echoes.Runtime
+namespace Echoes.Runtime.ScriptableObjects
 {
     
     [Serializable]
-    public class GlobalGroupes
+    public class GlobalGroups
     {
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
-        public List<GroupesRow> Groupes = new();
+        public List<GroupsRow> Groups = new();
 
         [Serializable]
-        public class GroupesRow
+        public class GroupsRow
         {
-            public string Name = "New Groupe";
+            public string Name = "New Group";
 
             [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
             public List<EchoesNpcComponent> Members = new();
 
             private IEnumerable GetAllNPCs()
             {
-                List<EchoesNpcComponent> npcs = EchoesGlobal.GetAllNPCs();
-                return npcs;
+                return EchoesGlobal.GetAllNPCs();
             }
         }
     }

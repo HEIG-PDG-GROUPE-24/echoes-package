@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
-namespace Echoes.Runtime
+namespace Echoes.Runtime.ScriptableObjects
 {
     [Serializable]
     public class GlobalTrust

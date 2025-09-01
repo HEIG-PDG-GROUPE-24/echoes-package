@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Echoes.Runtime.ScriptableObjects;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace Echoes.Runtime
+namespace Echoes.Runtime.ScriptableObjects
 {
-    [CreateAssetMenu(fileName = "NPCSo", menuName = "Scriptable Objects/Echoes - NPC")]
+    [CreateAssetMenu(fileName = "NPCSo", menuName = "Echoes/NPC")]
     public class NPC : ScriptableObject
     {
         
@@ -54,8 +52,8 @@ namespace Echoes.Runtime
 
             var row = Trusts[index];
             row.current = this; ;
-            row.Min = NPCGlobalStatsGeneratorSo.Instance.globalTrust.minValue;
-            row.Max = NPCGlobalStatsGeneratorSo.Instance.globalTrust.maxValue;
+            row.Min = GlobalStats.Instance.globalTrust.minValue;
+            row.Max = GlobalStats.Instance.globalTrust.maxValue;
             
             if (row.TrustLevel < row.Min || row.TrustLevel > row.Max)
                 row.ResetTrust();
@@ -68,8 +66,8 @@ namespace Echoes.Runtime
                 return;
 
             var row = Traits[index];
-            var min = NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-            var max = NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue;
+            var min = GlobalStats.Instance.globalTraits.minValue;
+            var max = GlobalStats.Instance.globalTraits.maxValue;
             row.Min = min;
             row.Max = max;
 
@@ -84,8 +82,8 @@ namespace Echoes.Runtime
                 return;
 
             var row = Opinions[index];
-            var min = NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
-            var max = NPCGlobalStatsGeneratorSo.Instance.globalTraits.maxValue;
+            var min = GlobalStats.Instance.globalTraits.minValue;
+            var max = GlobalStats.Instance.globalTraits.maxValue;
             row.Min = min;
             row.Max = max;
 
@@ -101,8 +99,8 @@ namespace Echoes.Runtime
 
             Traits.Clear();
             Opinions.Clear();
-            List<GlobalTraitsRow> newer = NPCGlobalStatsGeneratorSo.Instance.globalTraits.Traits;
-            var min = NPCGlobalStatsGeneratorSo.Instance.globalTraits.minValue;
+            List<GlobalTraitsRow> newer = GlobalStats.Instance.globalTraits.Traits;
+            var min = GlobalStats.Instance.globalTraits.minValue;
 
             foreach (var t in newer)
             {

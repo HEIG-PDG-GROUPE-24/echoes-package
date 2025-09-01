@@ -8,8 +8,11 @@ namespace Echoes.Runtime
 {
     public class EchoesGlobal : MonoBehaviour
     {
-        [InlineEditor] public NPCGlobalStatsGeneratorSo GlobalStats;
+        [InlineEditor] public GlobalStats GlobalStats;
 
+        /**
+         * Returns all NPCs in the scene.
+         */
         public static List<EchoesNpcComponent> GetAllNPCs() => FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None).ToList();
     }
 }
