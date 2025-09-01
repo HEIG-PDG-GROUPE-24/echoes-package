@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Alice
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
   Name: Alice
-  Contacts: []
+  Contacts:
+  - {fileID: 0}
   Trusts:
   - Contact: {fileID: 0}
     TrustLevel: 6
