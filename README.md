@@ -10,7 +10,7 @@
     &middot;
     <a href="https://heig-pdg-groupe-24.github.io/landing-page/">Landing page</a>
     &middot;
-    <a href="https://heig-pdg-groupe-24.github.io/documentation/index.html">Documentaion Site</a>
+    <a href="https://heig-pdg-groupe-24.github.io/documentation/index.html">Documentation Site</a>
 </div>
 
 
@@ -76,6 +76,25 @@ This section should list any major frameworks/libraries used to bootstrap your p
 ### Prerequisites
 
 ### Installation
+This guide provides the most straightforward way to setup Echoes in your project. We utilise unity package manager to import the latest version straight from our repository.
+
+#### Unity
+Follow [Unity's official documentation](https://docs.unity3d.com/hub/manual/InstallHub.html) to install Unity on your system.
+You will need a valid Unity license, a free personal license is sufficient. Login to Unity Hub and create a new project.
+![](./readme_illustrations/unity_hub.png)
+
+#### Import Package
+Open the unity package manager  
+![](./readme_illustrations/open_package_manager.png)  
+
+Click add, add package from git repository  
+![](./readme_illustrations/package_manager_add.png)  
+
+On the package github repository, copy the code import https url and paste it in the git url field in the unity package manager, then click install.  
+![](./readme_illustrations/package_add_git_url.png)  
+
+You should then get this overview of the package. To upgrade to the latest version, simply click update.  
+![](./readme_illustrations/package_overview.png)  
 
 <!-- USAGE EXAMPLES -->
 ## Usage
