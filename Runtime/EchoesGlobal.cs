@@ -10,6 +10,6 @@ namespace Echoes.Runtime
     {
         [InlineEditor] public NPCGlobalStatsGeneratorSo GlobalStats;
 
-        public static List<NPCEchoes> GetAllNPCs() => FindObjectsByType<NPCEchoes>(FindObjectsSortMode.None).ToList();
+        public static List<EchoesNpcComponent> GetAllNPCs() => FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None).ToList();
     }
 }

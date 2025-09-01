@@ -19,11 +19,11 @@ namespace Echoes.Runtime
             public string Name = "New Groupe";
 
             [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
-            public List<NPCEchoes> Members = new();
+            public List<EchoesNpcComponent> Members = new();
 
             private IEnumerable GetAllNPCs()
             {
-                List<NPCEchoes> npcs = EchoesGlobal.GetAllNPCs();
+                List<EchoesNpcComponent> npcs = EchoesGlobal.GetAllNPCs();
                 return npcs;
             }
         }

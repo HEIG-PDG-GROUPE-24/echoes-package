@@ -15,7 +15,7 @@ namespace Echoes.Runtime
 
         [TabGroup("Infos", "Contacts", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
-        public List<NPCEchoes> Contacts = new();
+        public List<EchoesNpcComponent> Contacts = new();
 
 
         [TabGroup("Infos", "Trust", SdfIconType.Shield, TextColor = "#F7D6E0")]
@@ -42,7 +42,7 @@ namespace Echoes.Runtime
         
         private IEnumerable GetAllNPCs()
         {
-            List<NPCEchoes> npcs = EchoesGlobal.GetAllNPCs();
+            List<EchoesNpcComponent> npcs = EchoesGlobal.GetAllNPCs();
             npcs.RemoveAll(npc => npc.npcData.Name == Name);
             return npcs;
         }
