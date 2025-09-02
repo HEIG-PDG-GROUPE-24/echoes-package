@@ -242,8 +242,9 @@ namespace Echoes.Runtime
 
             foreach (var contact in _contacts)
             {
-                contact.ReceiveOpinion(this);
+               GlobalStats.Instance.AddRumor(new Rumor(this,contact));
             }
+            GlobalStats.Instance.UpdateRumors(0); // just to immediately propagate rumors with minimal distance
         }
 
         /**

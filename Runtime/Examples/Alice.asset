@@ -17,7 +17,9 @@ MonoBehaviour:
   - {fileID: 0}
   Trusts:
   - Contact: {fileID: 0}
-    TrustLevel: 6
+    TrustLevel: 8
+  - Contact: {fileID: 0}
+    TrustLevel: 8
   Traits:
   - Name: BlopA
     Intensity: 0
@@ -36,3 +38,12 @@ MonoBehaviour:
     Intensity: 5
     Min: 5
     Max: 10
+  Distances:
+  - Name: Billy
+    Distance: 2714
+    npcName: Alice
+    globalDistance:
+      minValue: 0
+      maxValue: 100000
+    Min: 0
+    Max: 100000

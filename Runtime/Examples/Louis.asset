@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: Louis
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
   Name: Louis
-  Contacts:
-  - {fileID: 0}
+  Contacts: []
   Trusts:
   - Contact: {fileID: 0}
     TrustLevel: 8
@@ -36,3 +35,4 @@ MonoBehaviour:
     Intensity: 7.5
     Min: 5
     Max: 10
+  Distances: []

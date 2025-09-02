@@ -15,7 +15,15 @@ MonoBehaviour:
   Name: Billy
   Contacts:
   - {fileID: 0}
-  - {fileID: 0}
   Trusts: []
   Traits: []
   Opinions: []
+  Distances:
+  - Name: Alice
+    Distance: 2714
+    npcName: Billy
+    globalDistance:
+      minValue: 0
+      maxValue: 100000
+    Min: 0
+    Max: 100000

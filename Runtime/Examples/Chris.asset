@@ -15,6 +15,24 @@ MonoBehaviour:
   Name: Chris
   Contacts:
   - {fileID: 0}
+  - {fileID: 0}
   Trusts: []
   Traits: []
   Opinions: []
+  Distances:
+  - Name: Jimmy
+    Distance: 87
+    npcName: Chris
+    globalDistance:
+      minValue: 0
+      maxValue: 1000
+    Min: 0
+    Max: 1000
+  - Name: Alice
+    Distance: 918
+    npcName: Chris
+    globalDistance:
+      minValue: 0
+      maxValue: 1000
+    Min: 0
+    Max: 1000
