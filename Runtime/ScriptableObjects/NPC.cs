@@ -8,11 +8,11 @@ namespace Echoes.Runtime.ScriptableObjects
     [CreateAssetMenu(fileName = "NPCSo", menuName = "Echoes/NPC")]
     public class NPC : ScriptableObject
     {
-        
         public string Name;
 
         [TabGroup("Infos", "Contacts", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
-        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)] [ValueDropdown("GetAllNPCs")]
+        [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
+        [ValueDropdown("GetAllNPCs")]
         public List<EchoesNpcComponent> Contacts = new();
 
 
@@ -37,29 +37,50 @@ namespace Echoes.Runtime.ScriptableObjects
             HideRemoveButton = true,
             OnBeginListElementGUI = nameof(OnOpinionRowAdded))]
         public List<TraitsRow> Opinions = new();
-        
+
+        [TabGroup("Infos", "Distances", SdfIconType.PinMap, TextColor = "#FFE1F6")]
+        [ListDrawerSettings(
+            ShowItemCount = true,
+            DraggableItems = false,
+            HideAddButton = true,
+            HideRemoveButton = true,
+            OnBeginListElementGUI = nameof(OnDistanceRowAdded)
+        )]
+        public List<ContactDistanceRow> Distances = new();
+
         private IEnumerable GetAllNPCs()
         {
             List<EchoesNpcComponent> npcs = EchoesGlobal.GetAllNPCs();
             npcs.RemoveAll(npc => npc.npcData.Name == Name);
             return npcs;
         }
-        
+
+        private void OnDistanceRowAdded(int index)
+        {
+            var row = Distances[index];
+
+            row.Max = GlobalStats.Instance.globalDistance.maxValue;
+            row.Min = GlobalStats.Instance.globalDistance.minValue;
+
+            if (row.Distance < row.Min) row.Distance = row.Min;
+            if (row.Distance > row.Max) row.Distance = row.Max;
+        }
+
         private void OnTrustRowAdded(int index)
         {
             if (index < 0 || index >= Trusts.Count)
                 return;
 
             var row = Trusts[index];
-            row.current = this; ;
+            row.current = this;
+            ;
             row.Min = GlobalStats.Instance.globalTrust.minValue;
             row.Max = GlobalStats.Instance.globalTrust.maxValue;
-            
+
             if (row.TrustLevel < row.Min || row.TrustLevel > row.Max)
                 row.ResetTrust();
-            
         }
-        
+
         private void OnTraitRowAdded(int index)
         {
             if (index < 0 || index >= Traits.Count)
@@ -73,9 +94,8 @@ namespace Echoes.Runtime.ScriptableObjects
 
             if (row.Intensity < row.Min || row.Intensity > row.Max)
                 row.Intensity = min;
-
         }
-        
+
         private void OnOpinionRowAdded(int index)
         {
             if (index < 0 || index >= Opinions.Count)
@@ -89,7 +109,6 @@ namespace Echoes.Runtime.ScriptableObjects
 
             if (row.Intensity < row.Min || row.Intensity > row.Max)
                 row.Intensity = min;
-
         }
 
         public void SyncWithGlobalTraits()
@@ -112,5 +131,21 @@ namespace Echoes.Runtime.ScriptableObjects
             }
         }
 
+        public void SyncWithGlobalDistances()
+        {
+            Distances.Clear();
+            var contacts = GlobalStats.Instance.globalDistance.ListContactsWithDistanceOf(this.Name);
+            foreach (var c in contacts)
+            {
+                ContactDistanceRow row = new ContactDistanceRow();
+                row.npcName = this.Name;
+                row.Name = c.Key;
+                row.Distance = c.Value;
+                row.globalDistance = GlobalStats.Instance.globalDistance;
+                row.Max =  GlobalStats.Instance.globalDistance.maxValue;
+                row.Min =  GlobalStats.Instance.globalDistance.minValue;
+                Distances.Add(row);
+            }
+        }
     }
 }
