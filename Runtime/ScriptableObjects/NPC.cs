@@ -13,8 +13,8 @@ namespace Echoes.Runtime.ScriptableObjects
         [TabGroup("Infos", "Contacts", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true)]
         [ValueDropdown("GetAllNPCs")]
+        [OnCollectionChanged(nameof(UpdateContactsDistances))]
         public List<EchoesNpcComponent> Contacts = new();
-
 
         [TabGroup("Infos", "Trust", SdfIconType.Shield, TextColor = "#F7D6E0")]
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true, OnBeginListElementGUI = nameof(OnTrustRowAdded))]
@@ -130,7 +130,12 @@ namespace Echoes.Runtime.ScriptableObjects
                 Opinions.Add(new TraitsRow(t.Name, oldOpinion != null ? oldOpinion.Intensity : min));
             }
         }
-
+        
+        public void UpdateContactsDistances()
+        {
+            GlobalStats.Instance.globalDistance.Update();
+        }
+        
         public void SyncWithGlobalDistances()
         {
             Distances.Clear();
