@@ -22,6 +22,11 @@ namespace Echoes.Runtime
         [SerializeField]
         public GlobalTrust globalTrust = new GlobalTrust();
         
+        [TabGroup("Infos","Distance", SdfIconType.PinMap, TextColor = "#FFE156")]
+        [InlineProperty, HideLabel]
+        [SerializeField]
+        public GlobalDistance globalDistance = new GlobalDistance();
+        
         private static GlobalStats _instance;
 
         public static GlobalStats Instance
