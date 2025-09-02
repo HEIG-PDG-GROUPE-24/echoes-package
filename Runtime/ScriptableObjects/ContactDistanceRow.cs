@@ -17,10 +17,6 @@ namespace Echoes.Runtime.ScriptableObjects
             globalDistance.SetContactDistance(npcName,Name,Distance);
         } 
 
-        public ContactDistanceRow()
-        {
-        }
-
         [HideInInspector] public string npcName;
         [HideInInspector] public GlobalDistance globalDistance;
         [HideInInspector] public double Min;

@@ -13,7 +13,35 @@ MonoBehaviour:
   m_Name: Jimmy
   m_EditorClassIdentifier: Echoes::Echoes.Runtime.NPC
   Name: Jimmy
-  Contacts: []
+  Contacts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   Trusts: []
   Traits: []
   Opinions: []
+  Distances:
+  - Name: Chris
+    Distance: 87
+    npcName: Jimmy
+    globalDistance:
+      minValue: 0
+      maxValue: 1000
+    Min: 0
+    Max: 1000
+  - Name: Billy
+    Distance: 178
+    npcName: Jimmy
+    globalDistance:
+      minValue: 0
+      maxValue: 1000
+    Min: 0
+    Max: 1000
+  - Name: Alice
+    Distance: 836
+    npcName: Jimmy
+    globalDistance:
+      minValue: 0
+      maxValue: 1000
+    Min: 0
+    Max: 1000

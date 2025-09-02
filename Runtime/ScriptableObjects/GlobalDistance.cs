@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using Sirenix.Utilities;
 using UnityEngine;
 
@@ -61,6 +62,7 @@ namespace Echoes.Runtime.ScriptableObjects
         }
 
 
+        [HideInInspector][OdinSerialize]
         private Dictionary<string, Dictionary<string, double>>
             _distancesBetweenContacts = new();
 
@@ -87,7 +89,11 @@ namespace Echoes.Runtime.ScriptableObjects
             else if (_distancesBetweenContacts.ContainsKey(npc2) && _distancesBetweenContacts[npc2].ContainsKey(npc1))
                 _distancesBetweenContacts[npc2][npc1] = distance;
             else
-                _distancesBetweenContacts[npc1][npc2] = distance;
+            {
+                if (!_distancesBetweenContacts.ContainsKey(npc1))
+                    _distancesBetweenContacts.Add(npc1, new Dictionary<string, double>());
+                _distancesBetweenContacts[npc1].Add(npc2, distance);
+            }
 
             UpdateNpcs();
         }

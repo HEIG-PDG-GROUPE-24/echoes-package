@@ -1,12 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
 using Echoes.Runtime.ScriptableObjects;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 
 namespace Echoes.Runtime
 {
     [CreateAssetMenu(fileName = "GlobalStats", menuName = "Echoes/Global Stats")]
-    public class GlobalStats : ScriptableObject
+    public class GlobalStats : SerializedScriptableObject
     { 
+        
         [TabGroup("Infos", "Traits", SdfIconType.ImageAlt, TextColor = "#99E3D4")]
         [InlineProperty, HideLabel]
         [SerializeField]
@@ -24,8 +28,28 @@ namespace Echoes.Runtime
         
         [TabGroup("Infos","Distance", SdfIconType.PinMap, TextColor = "#FFE156")]
         [InlineProperty, HideLabel]
-        [SerializeField]
+        [OdinSerialize]
         public GlobalDistance globalDistance = new GlobalDistance();
+        
+        private List<Rumor> _rumors = new List<Rumor>();
+        
+        /**
+         * @param rumor to add to the update list
+         */
+        public void AddRumor(Rumor rumor)
+        {
+            _rumors.Add(rumor);
+        }
+
+        /**
+         * @param distance to add to the distance ran of each rumor
+         * When the rumor ran the necessary distance, it propagates player opinion and is removed from the update list
+         */
+        public void UpdateRumors(double distance)
+        {
+            foreach (var rumor in _rumors.ToList().Where(rumor => rumor.Update(distance)))
+                _rumors.Remove(rumor);
+        }
         
         private static GlobalStats _instance;
 
