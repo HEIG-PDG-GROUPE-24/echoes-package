@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Echoes.Runtime.ScriptableObjects
 {
     [CreateAssetMenu(fileName = "NPCSo", menuName = "Echoes/NPC")]
-    public class NPC : ScriptableObject
+    public class NPC : ScriptableObject, ISerializationCallbackReceiver
     {
         public string Name;
 
@@ -15,6 +17,29 @@ namespace Echoes.Runtime.ScriptableObjects
         [ValueDropdown("GetAllNPCs")]
         [OnCollectionChanged(nameof(UpdateContactsDistances))]
         public List<EchoesNpcComponent> Contacts = new();
+
+        [HideInInspector] [SerializeField] public List<string> ContactsNames = new();
+
+        public void OnBeforeSerialize()
+        {
+            ContactsNames.Clear();
+            Contacts.Where(contact => contact != null)
+                .ForEach(contact => ContactsNames.Add(contact.npcData.Name));
+        }
+
+        public void OnAfterDeserialize()
+        {
+            // do nothing
+        }
+
+        public void ResolveContactsReferences()
+        {
+            Contacts.Clear();
+            FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None)
+                .Where(npcComponent => ContactsNames.Contains(npcComponent.npcData.Name))
+                .ForEach(npcComponent => Contacts.Add(npcComponent));
+            Trusts.ForEach(row => row.ResolveReference());
+        }
 
         [TabGroup("Infos", "Trust", SdfIconType.Shield, TextColor = "#F7D6E0")]
         [ListDrawerSettings(ShowFoldout = true, DraggableItems = true, OnBeginListElementGUI = nameof(OnTrustRowAdded))]
@@ -130,12 +155,12 @@ namespace Echoes.Runtime.ScriptableObjects
                 Opinions.Add(new TraitsRow(t.Name, oldOpinion != null ? oldOpinion.Intensity : min));
             }
         }
-        
+
         public void UpdateContactsDistances()
         {
             GlobalStats.Instance.globalDistance.Update();
         }
-        
+
         public void SyncWithGlobalDistances()
         {
             Distances.Clear();
@@ -147,8 +172,8 @@ namespace Echoes.Runtime.ScriptableObjects
                 row.Name = c.Key;
                 row.Distance = c.Value;
                 row.globalDistance = GlobalStats.Instance.globalDistance;
-                row.Max =  GlobalStats.Instance.globalDistance.maxValue;
-                row.Min =  GlobalStats.Instance.globalDistance.minValue;
+                row.Max = GlobalStats.Instance.globalDistance.maxValue;
+                row.Min = GlobalStats.Instance.globalDistance.minValue;
                 Distances.Add(row);
             }
         }

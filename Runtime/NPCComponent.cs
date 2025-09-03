@@ -6,6 +6,12 @@ using Echoes.Runtime.ScriptableObjects;
 using Echoes.Runtime.SerializableDataStructs;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.SceneManagement;
+#endif
 
 [assembly: InternalsVisibleTo("playmodeTests")]
 
@@ -90,7 +96,8 @@ namespace Echoes.Runtime
 
         public double GetTrustTowards(string informantName) => _informantsTrust[informantName];
 
-        public void SetTrustTowards(EchoesNpcComponent other, double value) => SetTrustTowards(other.npcData.name, value);
+        public void SetTrustTowards(EchoesNpcComponent other, double value) =>
+            SetTrustTowards(other.npcData.name, value);
 
         public void SetTrustTowards(string informantName, double value)
         {
@@ -163,7 +170,7 @@ namespace Echoes.Runtime
                 _personality.Add(trait.Name, trait.Intensity);
 
             _informantsTrust.Clear();
-            foreach (var trust in npcData.Trusts)
+            foreach (var trust in npcData.Trusts.Where(trust => trust.Contact != null))
                 _informantsTrust.Add(trust.Contact.name, trust.TrustLevel);
 
             _contacts.Clear();
@@ -242,8 +249,9 @@ namespace Echoes.Runtime
 
             foreach (var contact in _contacts)
             {
-               GlobalStats.Instance.AddRumor(new Rumor(this,contact));
+                GlobalStats.Instance.AddRumor(new Rumor(this, contact));
             }
+
             GlobalStats.Instance.UpdateRumors(0); // just to immediately propagate rumors with minimal distance
         }
 
