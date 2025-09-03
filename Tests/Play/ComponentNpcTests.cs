@@ -2,7 +2,7 @@ using Echoes.Runtime;
 using Echoes.Runtime.ScriptableObjects;
 using NUnit.Framework;
 using UnityEngine;
-
+using Debug = UnityEngine.Debug;
 namespace Tests.Play
 {
     public class ComponentNpcTests
@@ -23,6 +23,9 @@ namespace Tests.Play
             npc2.npcData.Name = "TestNPCData2";
             
             globalStats = GlobalStats.Instance;
+            
+            globalStats.globalTraits.Traits.Clear();
+            globalStats.globalTraits.Traits.Add(new GlobalTraitsRow("test"));
         }
 
         [Test]
@@ -130,7 +133,8 @@ namespace Tests.Play
             _echoesNpc.npcData.Traits.Clear();
             _echoesNpc.npcData.Traits.Add(new TraitsRow { Name = globalTrait.Name, Intensity = 50, Min = 0, Max = 100 });
             _echoesNpc.npcData.SyncWithGlobalTraits();
-
+            
+            _echoesNpc.npcData.Traits.ForEach(t => Debug.Log(t.Name));
             int count = _echoesNpc.npcData.Traits.FindAll(t => t.Name == globalTrait.Name).Count;
             Assert.AreEqual(1, count);
         }
@@ -263,7 +267,7 @@ namespace Tests.Play
         {
             foreach (var obj in Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None))
             {
-                Object.DestroyImmediate(obj.gameObject);
+                Object.Destroy(obj.gameObject);
             }
         }
     }
