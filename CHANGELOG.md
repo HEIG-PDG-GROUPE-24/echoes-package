@@ -7,3 +7,7 @@
 ### Feature Complete Release
 - All features implemented
 - Reference resolution for Scriptable Objects
+
+## [1.0.1] - 3.09.2025
+### Bug Fixes
+- Scene opening event not triggered when opening the editor
