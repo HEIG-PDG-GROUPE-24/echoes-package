@@ -15,35 +15,36 @@ MonoBehaviour:
   Name: Alice
   Contacts:
   - {fileID: 0}
+  ContactsNames:
+  - Billy
   Trusts:
   - Contact: {fileID: 0}
-    TrustLevel: 8
-  - Contact: {fileID: 0}
-    TrustLevel: 8
+    contactName: Billy
+    TrustLevel: 2
   Traits:
   - Name: BlopA
-    Intensity: 0
-    Min: 0
-    Max: 0
+    Intensity: 1
+    Min: 1
+    Max: 10
   - Name: ASD
-    Intensity: 0
-    Min: 0
-    Max: 0
+    Intensity: 1
+    Min: 1
+    Max: 10
   Opinions:
   - Name: BlopA
     Intensity: 5
-    Min: 5
+    Min: 1
     Max: 10
   - Name: ASD
     Intensity: 5
-    Min: 5
+    Min: 1
     Max: 10
   Distances:
   - Name: Billy
-    Distance: 2714
+    Distance: 658
     npcName: Alice
     globalDistance:
       minValue: 0
-      maxValue: 100000
+      maxValue: 1000
     Min: 0
-    Max: 100000
+    Max: 1000
