@@ -2,3 +2,8 @@
 ### First Release
 - Empty the current project to make it anew.
 - Create the package files for later.
+
+## [1.0.0] - 3.09.2025
+### Feature Complete Release
+- All features implemented
+- Reference resolution for Scriptable Objects
