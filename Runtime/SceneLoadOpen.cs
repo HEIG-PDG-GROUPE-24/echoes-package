@@ -10,6 +10,20 @@ using UnityEngine.SceneManagement;
 
 namespace Echoes.Runtime
 {
+    public static class LoadAction
+    {
+        public static void ResolveReferences()
+        {
+            Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None)
+                .Where(npc => npc.npcData != null)
+                .ForEach(npc =>
+                {
+                    npc.npcData.ResolveContactsReferences();
+                    npc.LoadFromSo();
+                });
+        }
+    }
+    
     public static class SceneLoadOpen
     {
         [RuntimeInitializeOnLoadMethod]
@@ -21,13 +35,7 @@ namespace Echoes.Runtime
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Debug.Log("Scene Loaded");
-            Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None)
-                .Where(npc => npc.npcData != null)
-                .ForEach(npc =>
-                {
-                    npc.npcData.ResolveContactsReferences();
-                    npc.LoadFromSo();
-                });
+            LoadAction.ResolveReferences();
         }
     }
 }
@@ -44,13 +52,7 @@ public static class EditorSceneWatcher
     private static void OnSceneOpened(Scene scene, OpenSceneMode mode)
     {
         Debug.Log($"[Editor] Scene opened: {scene.name}");
-        Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None)
-                .Where(npc => npc.npcData != null)
-                .ForEach(npc =>
-                {
-                    npc.npcData.ResolveContactsReferences();
-                    npc.LoadFromSo();
-                });
+        LoadAction.ResolveReferences();
     }
 }
 #endif

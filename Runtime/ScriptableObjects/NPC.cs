@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
+using UnityEditor;
 using UnityEngine;
 
 namespace Echoes.Runtime.ScriptableObjects
@@ -178,4 +180,28 @@ namespace Echoes.Runtime.ScriptableObjects
             }
         }
     }
+    
+    [CustomEditor(typeof(NPC))]
+    public class NPCEditor : OdinEditor
+    {
+        private bool _initialized = false;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+
+            if (!_initialized)
+            {
+                _initialized = true;
+                Debug.Log("MyData inspector opened for the first time!");
+                DoOneTimeInitialization();
+            }
+        }
+
+        private void DoOneTimeInitialization()
+        {
+            LoadAction.ResolveReferences();
+        }
+    }
+
 }

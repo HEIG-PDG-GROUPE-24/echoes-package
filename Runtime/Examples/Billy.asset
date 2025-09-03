@@ -25,7 +25,7 @@ MonoBehaviour:
   Opinions: []
   Distances:
   - Name: Alice
-    Distance: 799
+    Distance: 196
     npcName: Billy
     globalDistance:
       minValue: 0

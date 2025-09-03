@@ -41,7 +41,7 @@ MonoBehaviour:
     Max: 10
   Distances:
   - Name: Billy
-    Distance: 658
+    Distance: 196
     npcName: Alice
     globalDistance:
       minValue: 0
