@@ -161,6 +161,8 @@ namespace Echoes.Runtime
          */
         public void LoadFromSo()
         {
+            name = npcData.name;
+            
             _opinionOfPlayer.Clear();
             foreach (var trait in npcData.Opinions)
                 _opinionOfPlayer.Add(trait.Name, trait.Intensity);
@@ -253,6 +255,14 @@ namespace Echoes.Runtime
             }
 
             GlobalStats.Instance.UpdateRumors(0); // just to immediately propagate rumors with minimal distance
+        }
+
+        /**
+         * @return a list of all globally defined traits
+         */
+        public static List<string> ExistingTraits()
+        {
+            return GlobalStats.Instance.globalTraits.Traits.AsEnumerable().Select(trait => trait.Name).ToList();
         }
 
         /**

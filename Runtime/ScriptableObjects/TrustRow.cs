@@ -50,8 +50,14 @@ namespace Echoes.Runtime.ScriptableObjects
 
         public void ResolveReference()
         {
-            Contact = Object.FindObjectsByType<EchoesNpcComponent>(FindObjectsSortMode.None)
-                .First(npc => npc.npcData != null && npc.npcData.Name == contactName);
+            try
+            {
+                Contact = EchoesGlobal.GetAllNPCs().Find(npc => npc.npcData != null && npc.npcData.Name == contactName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogErrorFormat("npc {0} could not be resolved", contactName);
+            }
         }
     }
 }

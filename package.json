@@ -1,6 +1,6 @@
 {
   "name": "com.heigvd.echoes",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "Echoes",
   "description": "A plugin for Unity to manage a dynamic NPC social network",
   "unity": "6.2",

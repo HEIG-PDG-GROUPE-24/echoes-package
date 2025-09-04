@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Echoes.Runtime.ScriptableObjects
@@ -41,6 +42,7 @@ namespace Echoes.Runtime.ScriptableObjects
                 .Where(npcComponent => ContactsNames.Contains(npcComponent.npcData.Name))
                 .ForEach(npcComponent => Contacts.Add(npcComponent));
             Trusts.ForEach(row => row.ResolveReference());
+            GlobalStats.Instance.globalGroups.Groups.ForEach(group => group.ResolveReferences());
         }
 
         [TabGroup("Infos", "Trust", SdfIconType.Shield, TextColor = "#F7D6E0")]
@@ -184,7 +186,7 @@ namespace Echoes.Runtime.ScriptableObjects
     [CustomEditor(typeof(NPC))]
     public class NPCEditor : OdinEditor
     {
-        private bool _initialized = false;
+        private static bool _initialized = false;
 
         protected override void OnEnable()
         {
@@ -193,13 +195,13 @@ namespace Echoes.Runtime.ScriptableObjects
             if (!_initialized)
             {
                 _initialized = true;
-                Debug.Log("MyData inspector opened for the first time!");
                 DoOneTimeInitialization();
             }
         }
 
         private void DoOneTimeInitialization()
         {
+            Debug.Log("Start resolving references");
             LoadAction.ResolveReferences();
         }
     }

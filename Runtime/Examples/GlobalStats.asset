@@ -95,7 +95,14 @@ MonoBehaviour:
     maxValue: 10
     Traits: []
   globalGroups:
-    Groups: []
+    Groups:
+    - Name: Friends
+      Members:
+      - {fileID: 0}
+      - {fileID: 0}
+      MemberNames:
+      - Alice
+      - Billy
   globalTrust:
     minValue: 1
     maxValue: 10

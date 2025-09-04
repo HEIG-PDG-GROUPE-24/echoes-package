@@ -262,6 +262,15 @@ namespace Tests.Play
             Assert.AreEqual(80, npc2.npcData.Trusts[0].TrustLevel);
         }
 
+        [Test]
+        public void ListGlobalTraits()
+        {
+            GlobalStats.Instance.globalTraits.Traits.Clear();
+            GlobalStats.Instance.globalTraits.Traits.Add(new GlobalTraitsRow("test"));
+
+            Assert.AreEqual(EchoesNpcComponent.ExistingTraits()[0], "test");
+        }
+
         [TearDown]
         public void TearDown()
         {

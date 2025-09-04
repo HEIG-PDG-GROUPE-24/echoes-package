@@ -47,6 +47,8 @@ namespace Echoes.Runtime.SerializableDataStructs
                     level = echoesNpc.GetTrustTowards(informantName)
                 };
             }
+
+            name = echoesNpc.name;
         }
     }
 }

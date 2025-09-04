@@ -11,3 +11,9 @@
 ## [1.0.1] - 3.09.2025
 ### Bug Fixes
 - Scene opening event not triggered when opening the editor
+
+## [1.0.2] - 4.09.2025
+### Bug Fixes
+- Group reference resolve
+- Trigger reference solving only once
+- Added static method on npc component to get all global traits
