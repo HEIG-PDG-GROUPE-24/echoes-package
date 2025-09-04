@@ -201,10 +201,13 @@ namespace Echoes.Runtime
          * @return value of x normalized between -1.0 and 1.0
          * @throws ArgumentOutOfRangeException
          */
-        private double Normalize(double x, double min, double max)
+        private double Normalize(double x, double min, double max, bool clamp = true)
         {
-            if (x < min || x > max)
+            if (!clamp && (x < min || x > max))
                 throw new ArgumentOutOfRangeException(nameof(x), x, "value must be between min and max inclusive");
+            
+            x = Math.Clamp(x, min, max);
+            
             return (x - min) / (max - min) * 2 - 1;
         }
 
