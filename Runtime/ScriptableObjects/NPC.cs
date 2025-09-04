@@ -186,7 +186,7 @@ namespace Echoes.Runtime.ScriptableObjects
     [CustomEditor(typeof(NPC))]
     public class NPCEditor : OdinEditor
     {
-        private static bool _initialized = false;
+        private bool _initialized = false;
 
         protected override void OnEnable()
         {
