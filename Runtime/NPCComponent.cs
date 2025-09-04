@@ -38,27 +38,31 @@ namespace Echoes.Runtime
          * @param opinion new value for the trait
          * @throws ArgumentOutOfRangeException if opinion isn't in the globally defined correct range
          */
-        public void SetOpinionOfPlayer(string traitName, double opinion)
+        public void SetOpinionOfPlayer(string traitName, double opinion, bool clamp = true)
         {
-            if (!IsValidTraitValue(opinion))
+            if (!clamp && !IsValidTraitValue(opinion))
                 throw new ArgumentOutOfRangeException(nameof(opinion), opinion,
                     "Should be between minimum and maximum inclusive values for traits");
+            
+            opinion = Math.Clamp(opinion,
+                GlobalStats.Instance.globalTraits.minValue,
+                GlobalStats.Instance.globalTraits.maxValue);
 
             _opinionOfPlayer[traitName] = opinion;
         }
 
         /**
          * @param traitName name of the trait to change opinion on
-         * @param value value to add to the current opinion
+         * @param value to add to the current opinion
          * @throws ArgumentOutOfRangeException if opinion isn't in the globally defined correct range
          */
-        public void AddToOpinionOfPlayer(string traitName, double value) =>
-            SetOpinionOfPlayer(traitName, value + _opinionOfPlayer[traitName]);
+        public void AddToOpinionOfPlayer(string traitName, double value, bool clamp = true) =>
+            SetOpinionOfPlayer(traitName, value + _opinionOfPlayer[traitName],  clamp);
 
         /**
          * Allows tests get all keys, since they may not be globally defined
          */
-        internal List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
+        public List<string> GetPlayerOpinionTraits() => _opinionOfPlayer.Keys.ToList();
 
         private Dictionary<string, double> _personality = new();
 
@@ -82,9 +86,9 @@ namespace Echoes.Runtime
         }
 
         /**
-         * Allows tests get all keys, since they may not be globally defined
+         * Easy way to get all traits in personality
          */
-        internal List<string> GetPersonalityTraits() => _personality.Keys.ToList();
+        public List<string> GetPersonalityTraits() => _personality.Keys.ToList();
 
         private Dictionary<string, double> _informantsTrust = new();
 
@@ -215,7 +219,7 @@ namespace Echoes.Runtime
                 double maxDiff = GlobalStats.Instance.globalTraits.maxValue -
                                  GlobalStats.Instance.globalTraits.minValue;
                 double diff = Math.Abs(_opinionOfPlayer[trait] - _personality[trait]);
-                score -= Normalize(diff, 0, maxDiff) / _personality.Count;
+                score -= Normalize(diff, -0.01, maxDiff) / _personality.Count;
             }
 
             return score;

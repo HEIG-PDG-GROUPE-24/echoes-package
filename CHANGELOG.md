@@ -17,3 +17,9 @@
 - Group reference resolve
 - Trigger reference solving only once
 - Added static method on npc component to get all global traits
+
+## [1.0.3] - 4.09.2025
+### Bug Fixes
+- Savesystem null ref
+- visibility in npcComponent
+- option to clamp on set opinion
