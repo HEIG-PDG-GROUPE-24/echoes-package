@@ -56,8 +56,9 @@ namespace Echoes.Runtime
                 _rumors.Remove(rumor);
             }
         }
-
+        [HideInInspector][NonSerialized]
         public HashSet<Action<Rumor>> OnRumorAdded = new();
+        [HideInInspector][NonSerialized]
         public HashSet<Action<Rumor>> OnRumorRemoved = new();
         
         private static GlobalStats _instance;
