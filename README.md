@@ -66,9 +66,11 @@ We will use the following technologies and patterns to implement the plugin:
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+Software and library used :
 
 * [![Unity][Unity]][Unity-url]
+* [NodeGraphProccessor](https://github.com/alelievr/NodeGraphProcessor)
+* [Odin Inspector](https://odininspector.com/)
 
 <!-- GETTING STARTED -->
 ## Getting Started
