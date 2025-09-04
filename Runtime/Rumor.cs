@@ -38,5 +38,9 @@ namespace Echoes.Runtime
                 return _to.ReceiveOpinion(_from);
             return false;
         }
+
+        public EchoesNpcComponent GetFrom() => _from;
+        public EchoesNpcComponent GetTo() => _to;
+        public double Progression() => _distanceRan / _distanceToRun;
     }
 }

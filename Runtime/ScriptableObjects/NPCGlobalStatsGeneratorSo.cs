@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Echoes.Runtime.ScriptableObjects;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Echoes.Runtime
@@ -38,6 +40,7 @@ namespace Echoes.Runtime
          */
         public void AddRumor(Rumor rumor)
         {
+            OnRumorAdded.ForEach(action => action(rumor));
             _rumors.Add(rumor);
         }
 
@@ -48,8 +51,14 @@ namespace Echoes.Runtime
         public void UpdateRumors(double distance)
         {
             foreach (var rumor in _rumors.ToList().Where(rumor => rumor.Update(distance)))
+            {
+                OnRumorRemoved.ForEach(action => action(rumor));
                 _rumors.Remove(rumor);
+            }
         }
+
+        public HashSet<Action<Rumor>> OnRumorAdded = new();
+        public HashSet<Action<Rumor>> OnRumorRemoved = new();
         
         private static GlobalStats _instance;
 
