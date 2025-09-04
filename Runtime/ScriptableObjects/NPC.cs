@@ -201,7 +201,6 @@ namespace Echoes.Runtime.ScriptableObjects
 
         private void DoOneTimeInitialization()
         {
-            Debug.Log("Start resolving references");
             LoadAction.ResolveReferences();
         }
     }

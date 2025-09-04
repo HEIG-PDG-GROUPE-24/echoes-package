@@ -257,6 +257,8 @@ namespace Echoes.Runtime
             {
                 GlobalStats.Instance.AddRumor(new Rumor(this, contact));
             }
+            
+            InPlayerInteraction = false;
 
             GlobalStats.Instance.UpdateRumors(0); // just to immediately propagate rumors with minimal distance
         }
